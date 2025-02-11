@@ -1,0 +1,198 @@
+var check_sel;
+var minimX = 1000000;
+var maximX = -1000000;
+var che;
+var minimY = 1000000;
+var maximY = -1000000;
+
+        function checki(select) {
+        check_sel = -1;
+          console.log(check_sel);
+          che = check_sel;
+          if (check_sel == -1) {
+            che = 0;
+          }
+          //alert("Вы выбрали " + check_sel + " этаж");
+          for (j in lit.layers.Buildings.layerRaws) {
+            //                console.log(j);
+            if (lit.layers.Buildings.layerRaws[j].geometry.floor == check_sel) {
+              var i = lit.layers.Buildings.layerRaws[j];
+              //                    console.log(' I = ' + i);
+
+              //                    console.log('floor=' + i.geometry.floor);
+              for (coord_num in i.geometry.coordinates) {
+                console.log(
+                  "coord x1=" +
+                    i.geometry.coordinates[coord_num][0] +
+                    " y1=" +
+                    i.geometry.coordinates[coord_num][1]
+                );
+                if ((+i.geometry.coordinates[coord_num][0]) > maximX) {
+                  maximX = i.geometry.coordinates[coord_num][0];
+                }
+                if (+i.geometry.coordinates[coord_num][0] < minimX) {
+                  minimX = i.geometry.coordinates[coord_num][0];
+                }
+                if (+i.geometry.coordinates[coord_num][1] > maximY) {
+                  maximY = i.geometry.coordinates[coord_num][1];
+                }
+                if (+i.geometry.coordinates[coord_num][1] < minimY) {
+                  minimY = i.geometry.coordinates[coord_num][1];
+                }
+              }
+            }
+          }
+          console.log("X ", minimX, maximX);
+          console.log("Y ", minimY, maximY);
+        }
+
+
+
+
+var arr = [];
+
+var flip = false;
+function addRooms() {
+  roomsGrp.clearLayers();
+  console.log(' 111 addRooms '+roomsGrp +' lit='+ 'JSON.stringify(lit)');
+  check_sel = $("input[type='radio'][name='floornum']:checked").val();
+  let aaa = $("input[type='radio'][name='floornum']:checked");
+  console.log('aaa='+aaa);
+  let data = lit.layers.Rooms.layerRaws.filter(function (item, i, arr) {
+    if (item.geometry.floor == check_sel) return item;
+  });
+  console.log(check_sel+' Rooms '+ JSON.stringify(data));
+  // let dataFloor = lit.layers.Floors.layerRaws.filter(function (item, i, arr) {
+  //   if (item.geometry.floor == check_sel) return item;
+  // });
+  // let latlngsFloor = [];
+  // let aa = dataFloor[0];
+  // aa = aa.geometry;
+  // aa = aa.coordinates;
+  
+  // for (var j = 0; j < aa.length; j++) {
+  //   latlngsFloor.push([
+  //     rescaleY(aa[j][1]),
+  //     rescaleX(aa[j][0]),
+  //   ]);
+  // }
+  // polyline = L.polygon(latlngsFloor, {
+  //   fillColor: "white",
+  //   fillOpacity: 0.2,
+  //   color: "black",
+  //   weight: 4,
+  // });
+  // roomsGrp.addLayer(polyline);
+
+  for (var i = 0; i < data.length; i++) {
+     console.log(' Room !!!'+data[i].properties.name+' '+ JSON.stringify(data[i].geometry.coordinates));
+    let latlngs = [];
+    let rlatlngs = [];
+    rColor = "#cccccc";
+    // ctx.moveTo(
+    //     rescaleX(data[i].geometry.coordinates[0][0]),
+    //     rescaleY(data[i].geometry.coordinates[0][1])
+    // );
+    var roomName = data[i].properties.name;
+    if (roomName in roomOwner) {
+      rColor = ownerColor[roomOwner[roomName]];
+    } else {
+      rColor = ownerColor[roomOwner["default"]];
+    }
+    for (var j = 0; j < data[i].geometry.coordinates.length; j++) {
+      latlngs.push([
+        rescaleY(data[i].geometry.coordinates[j][1]),
+        rescaleX(data[i].geometry.coordinates[j][0]),
+      ]);
+      rlatlngs.push([
+        +(data[i].geometry.coordinates[j][1]),
+        +(data[i].geometry.coordinates[j][0]),
+      ]);
+
+    }
+
+    polyline = L.polygon(latlngs, {
+      fillColor: rColor,
+      fillOpacity: 0.5,
+      color: "black",
+      weight: 2,
+    });
+    roomsGrp.addLayer(polyline);
+
+    // .addTo(lit_map);
+    var descr = '';
+    if (roomName != ""){
+	descr = roomName+'<br>';
+        console.log(latlngs);
+        for (let j = 0; j < hint_data.length; j++){
+            if (hint_data[j].rooms.indexOf(roomName) > -1){
+                descr += hint_data[j]['f'] + " " + hint_data[j]['i'] + " " + hint_data[j]['o'] + "<br>"
+            }
+        }
+        var minX = maxX = latlngs[0][0];
+        var minY = maxY = latlngs[0][1];
+        for (let b = 0; b < latlngs.length; b++){
+            if (latlngs[b][0] < minX){
+                minX = latlngs[b][0];
+            }
+            if (latlngs[b][0] > maxX){
+                maxX = latlngs[b][0];
+            }
+            if (latlngs[b][1] < minY){
+                minY = latlngs[b][1];
+            }
+            if (latlngs[b][1] > maxY){
+                maxY = latlngs[b][1];
+            }
+        }
+        var square = (maxX - minX) * (maxY - minY);
+        descr += "Площадь: " + parseInt(square*(1.3*1.3)/100)+' кв.м';
+    }
+    console.log('descr ' + descr);
+    polyline
+      .bindTooltip(roomName, {
+        permanent: true,
+        direction: "center",
+        className: "lhep_obj_tooltip",
+      })
+      .openTooltip();
+    console.log(roomName+' descr='+descr)
+    polyline.bindPopup(descr, {
+      autoPanPaddingTopLeft: [50, 50],
+      className: "lhep_obj_popup",
+    }).on;
+   console.log(' polyline '+latlngs);
+  }
+}
+function test_room(){
+  var latlngs = [
+    [1, 1],
+    [200, 200],
+    [1, 300],
+  ];
+  polyline = L.polygon(latlngs, {
+    fillOpacity: 1,
+    color: "red",
+    weight: 2,
+  }).addTo(lit_map);
+}
+
+
+function rescaleX(x) {
+    let aaa = x / 13;
+  return parseInt(aaa);
+}
+
+function descaleY(y) {
+    let aaa = y * 13;
+    return parseInt(aaa);
+}
+function descaleX(x) {
+    let aaa = x * 13;
+  return parseInt(aaa);
+}
+
+function rescaleY(y) {
+    let aaa = (minimY - (y - maximY)) / 13;
+    return parseInt(aaa);
+}

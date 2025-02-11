@@ -1,0 +1,19 @@
+﻿<script>
+function txtNow(){
+	var  aaa = (new Date())
+	var mm =(aaa.getMonth()+1)+'';
+	var dd = aaa.getDate()+'';
+	var yy = aaa.getFullYear()+'';
+	var hh = aaa.getHours()+'';
+	var nn = aaa.getMinutes()+'';
+	var ss = aaa.getSeconds()+'';
+	while (mm.length<2) {mm = '0'+mm;}
+	while (dd.length<2) {dd = '0'+mm;}
+	while (nn.length<2) {nn = '0'+nn;}
+	while (ss.length<2) {ss = '0'+ss;}
+	while (hh.length<2) {hh = '0'+hh;}
+	var retval = (yy+'/'+mm+'/'+dd+' '+hh+':'+nn+':'+ss);
+	return retval;
+}
+document.write(txtNow());
+</script>

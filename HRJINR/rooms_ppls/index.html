@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/leaflet.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.4.0.js"></script>
+    <script src="js/js.js"></script>
+    <script src="js/js.cookie.js"></script>
+
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet/Leaflet.Editable.js"></script>
+    <script src="js/leaflet/Leaflet.ImageOverlay.Rotated.js"></script>
+    <script src="js/server.js"></script>
+    <title>Заполнение информации об отделении</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Bootstrap Bundle JS (jsDelivr CDN) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 class="align-middle text-center fw-bold">Заполнение информации об отделении</h1>
+    <!-- <button onclick="button_start()" class="button_start" title="Подгрузить данные с сервера">Показать данные в таблице</button>-->
+    <div class="kap_but" style="display: none;">
+        <h2 class="fw-bold">
+            Выберите отдел:
+
+            <select  onchange="showOptions(this)">
+                <option id="1"></option>
+                <option id="100000">ЛИТ</option>
+                <option id="600000">ЛВФЭ</option>
+            </select>
+        </h2>
+    </div>
+    <!--<select onchange="Primer(this)">
+        <option id="1">1</option>
+        <option id="2">2</option>
+        <option id="3">3</option>
+    </select>-->
+    <br /> 
+    <button onclick="button_saveall()" class="button_saveall btn btn-secondary kap_but" title="Сохранение данных">Сохранить все</button>
+    <br /> <br />
+    <!--<button onclick="button_steret()"  class="button_steret" title="Добавить строку">Стереть</button>-->
+    <!--<label id="label" for="selectBuildId">Здание: </label>
+    <div id="outputSelect"></div>-->
+    <div class="tablica_zd" id="tablica_zd__display" style="display:block;">
+        <table id="room_tbl" class="table table-hover">
+            <tbody id="bar">
+            </tbody>
+        </table>
+        <!--<button class="button_add" title="Добавить строку">Добавить</button>
+
+        <button class="button_save" title="Сохранить данные из таблицы">Cохранить</button>
+        <button onclick="button_load()" class="button_load" title="Загрузка данных с сервера">Загрузить данные</button>-->
+
+
+    </div>
+    <script>
+        var select_text_global;
+        var flag_first_select = true;
+        /*function create_select_mod1(div_id, b_id, postfix, i_cell, cat) {
+            if (flag_first_select===false) {
+                let url = ' https://lt-svr230.jinr.ru:8082/get_buildings';
+                //    let url = 'http://127.0.0.1:8082/get_buildings';
+                fetch(url).then((response) => {
+                    if (response.ok) {
+                        console.log('select connected');
+                        flag_first_select = false;
+                        return response.text();
+
+                    }
+                }).then((data) => {
+                    select_text_global = data;
+                    *//*  console.log(cat, data);*//*
+                    data = data.replace('select_get_building_id', 'select_get_building_id_' + i_cell + '_' + postfix);
+                    data = data.replace('value =' + b_id, 'value=' + b_id + ' selected ' + postfix);
+                    if (data.indexOf('=175') >= 0) {
+                        let a = data.indexOf('"' + b_id + '"')
+                        *//*  debugger;*//*
+                    }
+                    if (cat === 1) {
+                      *//*  console.log("change");
+                    *//*    data = data.replace('<select', '<select disabled ');
+                    }
+                    
+                    document.getElementById(div_id).innerHTML = data;
+                    *//*select_disabled(i_cell);*//*
+                });
+            }
+            else {
+                select_text(select_text_global, b_id, postfix, i_cell, cat);
+            }
+            
+        }*/
+        function create_select_mod(){
+            let url = ' https://lt-svr230.jinr.ru:8082/get_buildings';
+            //    let url = 'http://127.0.0.1:8082/get_buildings';
+            fetch(url).then((response) => {
+                if (response.ok) {
+                    console.log('select connected');
+                    flag_first_select = false;
+                    return response.text();
+
+                }
+            }).then((data) => {
+                select_text_global = data;
+                console.log('select_text_global', select_text_global);
+            });
+        }
+        function select_text(div_id, b_id, postfix, i_cell, cat) {
+            let data = select_text_global;
+           /* console.log(data);*/
+            data = data.replace('select_get_building_id', 'select_get_building_id_' + i_cell + '_' + postfix + ' ' + 'class=main_select');
+            data = data.replace('value =' + b_id, 'value=' + b_id + ' selected ' + postfix);
+            if (data.indexOf('=175') >= 0) {
+                let a = data.indexOf('"' + b_id + '"')
+                /*  debugger;*/
+            }
+            if (cat === 1 || cat === null) {
+            data = data.replace('<select', '<select disabled ');
+            }
+            //flag_select = false;
+            return data;
+            //document.getElementById(div_id).innerHTML = data;
+
+        }
+        function Primer(s) {
+            console.log(s);
+            console.log( s.selectedIndex);
+            console.log(s[s.selectedIndex]);
+            /*s[s.selectedIndex].value = 1241241243; // get value
+            s[s.selectedIndex].id = 4; 
+            s[s.selectedIndex].text = "Ghfsdfs";*/
+        }
+        function showOptions(s) {
+            console.log(s[s.selectedIndex].id); // get id
+            button_start(s[s.selectedIndex].id);
+        }
+        function button_start(ind_id) {
+            var LVFE = get_emp_js(ind_id);
+        }
+
+        function buildingChange() {
+            console.log("buildingChange");
+            button_load();
+
+        }
+        create_select_mod();
+        //console.log('done select', select_text_global);
+        //lvl3_div_name: 'Сектор №5 алгебраических и квантовых вычислений', topparent_name: 'Научный отдел вычислительной физики', subtopparent_name: 'Сектор №5 алгебраических и квантовых вычислений', tab_n: 114357, F: 'Абгарян', …}
+        function MAS_SOTR_OTDEL(data_L) {
+            console.log('MAS_SOTR_OTDEL');
+            console.log(data_L);
+            
+            DrawCell(data_L);
+        }
+
+        var cell = '';
+        var i_cell = 0;
+
+        var flagi = 0;
+        var i_cell_num = 1;
+        function DrawCell(data_L) {
+            console.log("Data L", JSON.stringify(data_L));
+
+            button_steret();
+            DC();
+            var keys = Object.keys(data_L);
+            var tbl = document.getElementById('room_tbl');
+            i_cell_num = 1;
+            i_cell = 0;
+
+            for (var i = 0; i < keys.length; i++) {
+                var table_in = '';
+                let ind_place = 0;
+                for (var j = 0; j < data_L[keys[i]].length; j++) {
+
+                    
+                    if (i == 16){
+                        console.log(keys[i],j,'\n', JSON.stringify(data_L[keys[i]]),'\n',JSON.stringify(data_L[keys[i]][j]),'\n','cat=', data_L[keys[i]][j].category);
+                        debugger
+                    };
+
+                    if (data_L[keys[i]][j].category == 1) {continue};
+                    table_in += '<tr id ="ind_place_' + i_cell + '_' + (ind_place) + '" >\
+                                                '+ SOUT(j, data_L[keys[i]][j].category, i_cell, data_L[keys[i]][j].room) + Select_building(j, data_L[keys[i]][j].building, i_cell, data_L[keys[i]][j].category) + button_Del_SOUT(i_cell, j, data_L[keys[i]][j].category) + '\
+                                            </tr>';
+                    ind_place = ind_place + 1;
+                    
+                    
+                }
+
+                cell += '<tr class="align-middle" id="row_' + i_cell + '">  \
+                        <td id="tab_n'+ i_cell + '">' + data_L[keys[i]][0].tab_n + '</td> \
+                        <td id="FIO'+ i_cell + '">' + data_L[keys[i]][0].FIO + ' </td>\
+                        <td id="topparent_name'+ i_cell + '"> ' + data_L[keys[i]][0].topparent_name + '</td > \
+                        <td id="lvl3_div_name'+ i_cell + '">' + data_L[keys[i]][0].lvl3_div_name + ' </td> \
+                        <td id="subtopparent_name'+ i_cell + '">' + data_L[keys[i]][0].subtopparent_name + ' </td>  \
+                        <td id="category_room_building'+ i_cell + '"><table id="table_in' + i_cell + '">' + table_in + '</table></td>\
+                        <td><input class="button_save_row btn btn-secondary  align-middle" title="Добавить расположение" type="button" onclick="AddRow('+ i_cell + ',' + ind_place + ');" id="button_' + i_cell + '"value="Добавить"/>  </td></tr>';
+
+                i_cell += 1;
+            }
+            document.getElementById('room_tbl').innerHTML = cell;
+            Select_SOUT_Disable();
+            
+        }
+        function select_disabled(i_cell) {
+            console.log('select_disabled');
+            let select = document.getElementById('select_get_building_id_' + i + '_0');
+            select.setAttribute("disabled", true);
+            console.log("disabled");
+
+
+        }
+        function button_Del_SOUT(i_cell, j, cat) {
+            str = '';
+            if (cat == '1') {
+                str = '<td> </td>';
+            }
+            else {
+                str = '<td><input class="button_delete_row btn btn-outline-secondary" title="Удалить расположение" type="button" onclick="deleteRRow(' + i_cell + ',' + j + ');" value="Удалить" id="del_ind_place_' + i_cell + '_' + (j) + '" />  </td>'
+            }
+            
+
+            return str;
+
+        }
+
+        let flag_select = 0;
+        function Select_building(j, nomer, i_cell, cat) {
+            let str = '<td id="building' + j + '"><div id="outputSelect' + flag_select + '"></div></td>';
+            let s = "outputSelect" + flag_select;
+            let last_sel =select_text(s, nomer, j, i_cell, cat);
+            let str_itog = '<td id="building' + j + '"><div id="outputSelect' + flag_select + '">'+last_sel+'</div></td>'; 
+            flag_select += 1;
+            return str_itog;
+        }
+        function Select_SOUT_Disable() {
+            console.log("Select_SOUT_Disable");
+            i = 0;
+            while (i < i_cell) {
+                var Table_in = document.getElementById("table_in" + i);
+                var rows = Table_in.rows;
+                /* console.log(rows.length);*/
+                let n = 0;
+                let category = 0;
+                for (k = 0; k < rows.length; k++) {
+                    let ro = document.getElementById('ind_place_' + i + '_' + k);
+                    var tdrow1 = ro.getElementsByTagName('td')[0];
+                    if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                        category = tdrow1.getElementsByTagName('input')[0].value;
+                    }
+                    else {
+                        sel = tdrow1.getElementsByTagName('select')[0];
+                        category = sel[sel.selectedIndex].id;
+                    }
+                    if (category == 2) {
+                        n += 1;
+
+                    }
+
+                }
+
+                if (n != 0) {
+                    let category = 0;
+                    for (k = 0; k < rows.length; k++) {
+
+                        let ro = document.getElementById('ind_place_' + i + '_' + k);
+                        var tdrow1 = ro.getElementsByTagName('td')[0];
+                        if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                            category = tdrow1.getElementsByTagName('input')[0].value;
+                        }
+                        else {
+                            sel = tdrow1.getElementsByTagName('select')[0];
+                            category = sel[sel.selectedIndex].id;
+                            if (category != 2) {
+                                sel.setAttribute("disabled", true);
+                            }
+
+                        }
+
+                    }
+                }
+                i++;
+            }
+
+        }
+        function Select_SOUT_Able(j, i_cell) {
+            console.log("Select_SOUT_Able");
+            var Table_in = document.getElementById("table_in" + i_cell);
+            var rows = Table_in.rows;
+            let category = 0;
+
+            for (k = 0; k < rows.length; k++) {
+                let ro = document.getElementById('ind_place_' + i_cell + '_' + k);
+                var tdrow1 = ro.getElementsByTagName('td')[0];
+                if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                    category = tdrow1.getElementsByTagName('input')[0].value;
+                }
+                else {
+                    sel = tdrow1.getElementsByTagName('select')[0];
+                    category = sel[sel.selectedIndex].id;
+                    /*  console.log(category, sel);*/
+                    if (category != 2) {
+                        sel.removeAttribute("disabled", true);
+                    }
+
+                }
+
+            }
+        }
+        function Select_SOUT_DisAble_Two(j, i_cell) {
+            console.log("Select_SOUT_DisAble_Two");
+            var Table_in = document.getElementById("table_in" + i_cell);
+            var rows = Table_in.rows;
+            let category = 0;
+
+            for (k = 0; k < rows.length; k++) {
+                let ro = document.getElementById('ind_place_' + i_cell + '_' + k);
+                var tdrow1 = ro.getElementsByTagName('td')[0];
+                if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                    category = tdrow1.getElementsByTagName('input')[0].value;
+                }
+                else {
+                    sel = tdrow1.getElementsByTagName('select')[0];
+                    category = sel[sel.selectedIndex].id;
+                    console.log(category, sel);
+                    if (category != 2) {
+                        sel.setAttribute("disabled", true);
+                    }
+
+                }
+
+            }
+        }
+        function SOUT(j, cat, i_cell, room) {
+					if (cat ==1) {return};
+
+            let str = '';
+            if (cat == '1') {
+                str = '<td id="category' + j + '"><input type="text" id="textbox_category' + j + '" name="Name" value=' + 'СОУТ' + ' readonly> </td>';
+
+            }
+            if (cat == '2') {
+
+                cot = Number(cat) + 1;
+                str = '<td id="category' + j + '"><input type="text" id="textbox_category' + j + '" name="Name" value=' + 'СОУТ' + ' > </td>';
+                str = '<td id="category' + j + '"> \
+                              <select id="select' + i_cell + '_' + j + '" onchange="SOUT_Osn_Dop(' + j + ',' + i_cell + ');">  \
+                              <option value="'+ cat + '" id = "' + cat + '" >' + 'Основное' + '</option ><option value="' + cot + '" id = "' + cot + '" > ' + 'Дополнительное' + '</option>\
+                              </select> </td>';
+            }
+            if (cat == '3') {
+                cot = Number(cat) - 1;
+                str = '<td id="category' + j + '"><input type="text" id="textbox_category' + j + '" name="Name" value=' + cat + ' > </td>';
+                str = '<td id="category' + j + '"> \
+                           <select id="select' + i_cell + '_' + j + '" onchange="SOUT_Osn_Dop(' + j + ',' + i_cell + ');">  \
+                           <option value="'+ cat + '" id = "' + cat + '" >' + 'Дополнительное' + '</option ><option value="' + cot + '" id = "' + cot + '" > ' + 'Основное' + '</option>\
+                           </select> </td>';
+            }
+
+            if (cat == '1') {
+                str += '<td class="kap_room" id="room' + j + '">  <input type="text" id="textbox_room' + j + '" name="Name" readonly value=' + room + ' > </td>';
+            }
+            else {
+                str += '<td class="kap_room" id="room' + j + '">  <input type="text" id="textbox_room' + j + '" name="Name" value=' + room + '> </td>';
+            }
+            if (cat == null) {
+                str = '<td id="category' + j + '"><input type="text" id="textbox_category' + j + '" name="Name" value=' + 'СОУТ' + ' readonly> </td>';
+                str += '<td class="kap_room" id="room' + j + '">  <input type="text" id="textbox_room' + j + '" name="Name" readonly value="-" > </td>';
+            }
+            return str;
+        }
+        function SOUT_Osn_Dop(j, i_cell) {
+
+            console.log("SOUT_Osn_Dop");
+            let select = "select" + i_cell + "_" + j;
+            sel = document.getElementById(select);
+            //console.log(sel[sel.selectedIndex].id);
+
+            var Table_in = document.getElementById("table_in" + i_cell);
+            var rows = Table_in.rows;
+            let n = 0;
+            let category = 0;
+            for (k = 0; k < rows.length; k++) {
+                let ro = document.getElementById('ind_place_' + i_cell + '_' + k);
+                console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', ro)
+                var tdrow1 = ro.getElementsByTagName('td')[0];
+                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', tdrow1)
+                if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                    category = tdrow1.getElementsByTagName('input')[0].value;
+                }
+                else {
+                    sel = tdrow1.getElementsByTagName('select')[0];
+                    category = sel[sel.selectedIndex].id
+                }
+                console.log("category= ", category, sel);
+                if (category == 2) {
+                    n += 1;
+                }
+
+            }
+            console.log("n=", n);
+            if (n > 0) {
+                //alert('Нельзя назначать Основное место дважды. Сначала уберите Основное место у другого места.');
+                Select_SOUT_DisAble_Two(j, i_cell);
+            }
+            else {
+                Select_SOUT_Able(j, i_cell);
+            }
+
+        }
+        Element.prototype.remove = function () {
+            this.parentElement.removeChild(this);
+        }
+        NodeList.prototype.remove = HTMLCollection.prototype.remove = function () {
+            for (var i = this.length - 1; i >= 0; i--) {
+                if (this[i] && this[i].parentElement) {
+                    this[i].parentElement.removeChild(this[i]);
+                }
+            }
+        }
+
+        function deleteRRow(i_cell, j) {
+            let str = "ind_place_" + i_cell + '_' + j;
+            console.log(str);
+            var row = document.getElementById(str); //.remove();
+            console.log(row);
+            row.parentNode.removeChild(row);
+           
+            replaceIndexrow(j, i_cell);
+
+            
+        }
+        function replaceIndexrow(j,i_cell) {
+
+            var Table_in = document.getElementById("table_in" + i_cell);
+            var rows = Table_in.rows;
+            let len = rows.length;
+            let start = 0;
+
+            console.log(Table_in);
+            let ro;
+            let str;
+                for (k = 0; k < 100; k++) {
+                    if (document.getElementById('ind_place_' + i_cell + '_' + k) != undefined) {
+                        
+                        ro = document.getElementById('ind_place_' + i_cell + '_' + k);
+                        ro.id = 'ind_place_' + i_cell + '_' + start;
+
+                        if (document.getElementById('del_ind_place_' + i_cell + '_' + k) != undefined) {
+                            bt = document.getElementById('del_ind_place_' + i_cell + '_' + k);
+                            console.log(i_cell, k, bt);
+                            bt.id = 'del_ind_place_' + i_cell + '_' + start;
+                            bt.setAttribute("onClick", "deleteRRow(" + i_cell + "," + start + ");");
+                        }
+                       
+                        start += 1;
+                    }
+/*                    if (document.getElementById('del_ind_place_' + i_cell + '_' + k) != undefined) {
+                        bt = document.getElementById('del_ind_place_' + i_cell + '_' + k);
+                        console.log(bt);
+                        bt.id = 'del_ind_place_' + i_cell + '_' + start;
+                        
+                    }*/
+                    
+                }
+                var Table_in2 = document.getElementById("table_in" + i_cell);
+                console.log(Table_in2);
+                SOUT_Osn_Dop(j, i_cell);
+
+        }
+        function button_saveall() {
+            console.log("Save");
+            /*            let trs = document.querySelectorAll('tr');*/
+            documents_mas = [];
+            var all_sotr_mas = [];
+            let i = 0;
+            var m = {};
+            var masivo = {};
+            var save_all = {};
+            while (i < i_cell) {
+
+                if (null == document.getElementById('row_' + i)) {
+                    i += 1;
+                }
+                else {
+                    masivo = {};
+                    var Table_in = document.getElementById("table_in" + i);
+                    var rows = Table_in.rows;
+                    for (j = 0; j < rows.length; j++) {
+                        var tab_n = document.getElementById('tab_n' + i).innerHTML;
+                        let FIO = document.getElementById('FIO' + i).innerHTML;
+                        let topparent_name = document.getElementById('topparent_name' + i).innerHTML;
+                        let lvl3_div_name = document.getElementById('lvl3_div_name' + i).innerHTML;
+                        let subtopparent_name = document.getElementById('subtopparent_name' + i).innerHTML;
+
+                        let ro = document.getElementById('ind_place_' + i + '_' + j);
+                        var tdrow1 = ro.getElementsByTagName('td')[0];
+                       /* console.log(ro.getElementsByTagName('td').length);*/
+                        let category;
+                        let room = 0;
+                        let building;
+                        if (ro.getElementsByTagName('td').length == 4) {
+                           
+                            if (tdrow1.getElementsByTagName('input')[0] != undefined) {
+                                category = 1;
+                            }
+                            else {
+                                sel = tdrow1.getElementsByTagName('select')[0];
+                                category = sel[sel.selectedIndex].id
+                            }
+
+
+                            var tdrow2 = ro.getElementsByTagName('td')[1];
+                           /*
+                            console.log(tdrow2.getElementsByTagName('input')[0]);*/
+                            if (tdrow2.getElementsByTagName('input')[0].value == undefined) {
+                                room = 0;
+                            }
+                            else {
+                                room = tdrow2.getElementsByTagName('input')[0].value;
+                            }
+
+                            var tdrow3 = ro.getElementsByTagName('td')[2];
+                            building = tdrow3.getElementsByTagName('select')[0].value;
+                        }
+                        else {
+                            category = 1;
+                            var tdrow2 = ro.getElementsByTagName('td')[0];
+                            room = tdrow2.getElementsByTagName('input')[0].value;
+                            var tdrow3 = ro.getElementsByTagName('td')[1];
+                            building = tdrow3.getElementsByTagName('select')[0].value;
+                        }
+
+                        let obch = {
+                            "FIO": FIO,
+                            "building": building,
+                            "topparent_name": topparent_name,
+                            "lvl3_div_name": lvl3_div_name,
+                            "subtopparent_name": subtopparent_name,
+                            "room": room,
+                            "o_type": category,
+                            "building": building,
+                            "tab_n": tab_n
+                        };
+                        if (j == 0) {
+                            masivo = [];
+                        }
+
+                        masivo.push(obch);
+
+                        /*   console.log(obch);
+                           console.log(masivo);*/
+                        /* masivo = obch;*/
+                    }
+                    save_all[tab_n] = masivo;
+                       /* save_all[tab_n].push(masivo);*/
+                       /* console.log(save_all);*/
+                        /*d = {
+                            "o_type": category,
+                            "building": building,
+                            "room": room
+                        };
+
+                        var keys = Object.keys(m);
+
+                        if (keys.indexOf(tab_n) == -1) {
+                            m[tab_n] = [];
+                        }
+                        m[tab_n].push(d);*/
+
+
+/*                    console.log(JSON.stringify(m))
+*/                    i += 1;
+
+
+                }
+            }
+            console.log(JSON.stringify(save_all));
+            save_all_emp_rooms(JSON.stringify(save_all));
+        }
+
+
+        //DC();
+        function DC() {
+            cell += '<thead class="table-dark thead-dark  align-middle"><tr><th>Таблица номер</th><th>ФИО</th><th>Отделение</th><th>Отдел/сектор</th><th>Категория</th> <th style="text-align: left; width: 400px;">&nbsp;&nbsp;&nbsp;&nbsp;Тип размещения&nbsp;&nbsp; Комната&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Корпус</th><th>Добавить</th></tr></thead>';
+
+            document.getElementById('room_tbl').innerHTML = cell;
+
+        }
+
+
+        function button_steret() {
+            cell = '';
+            document.getElementById('room_tbl').innerHTML = cell;
+        }
+
+
+        function AddRow(i_cell, ind_place) {
+            
+            let m = "ind_place_" + i_cell + '_' + ind_place;
+
+            var Table_in = document.getElementById("table_in" + i_cell);
+
+            var rows = Table_in.rows;
+
+
+            if (rows.length > 0) {
+                var lastRow = rows[rows.length - 1];
+                var newRow = cloneRow(lastRow, true, Table_in);
+
+                //обновление id у строки
+                var idr = String(newRow.id);
+                var id = Number(idr[idr.length - 1]) + 1;
+                newRow.id = 'ind_place_' + i_cell + '_' + id;
+
+                //обновление id у первого td
+                var idtd1 = String(newRow.getElementsByTagName('td')[0].id);
+                var idt1 = Number(idtd1[idtd1.length - 1]) + 1;
+                newRow.getElementsByTagName('td')[0].id = 'category' + idt1;
+
+                var idtd2 = String(newRow.getElementsByTagName('td')[1].id);
+                var idt2 = Number(idtd2[idtd2.length - 1]) + 1;
+                newRow.getElementsByTagName('td')[1].id = 'room' + idt2;
+
+                var idtd3 = String(newRow.getElementsByTagName('td')[2].id);
+                var idt3 = Number(idtd3[idtd3.length - 1]) + 1;
+                newRow.getElementsByTagName('td')[2].id = 'building' + idt3;
+
+
+                var Table_in = document.getElementById("table_in" + i_cell);
+                var rows = Table_in.rows;
+                let len = rows.length - 1;
+                //соднание пустых инпутов
+                var tdrow1 = newRow.getElementsByTagName('td')[0];
+                if (tdrow1.getElementsByTagName('input')[0] == undefined) {
+                    sel = tdrow1.getElementsByTagName('select')[0];
+                    sel.setAttribute("onchange", "SOUT_Osn_Dop(" + len + "," + i_cell + ");");
+                    sel.value = 3;
+                    sel.id = "select" + i_cell + '_' + len;
+                }
+                else {
+                  
+                    b_input = tdrow1.getElementsByTagName('input')[0];
+                    tdrow1.getElementsByTagName('input')[0].value = '';
+                    tdrow1.getElementsByTagName('input')[0].removeAttribute("readonly", false);
+                   /* tdrow1.getElementsByTagName('input')[0].remove();*/
+                    const c = document.createElement("select");
+                    console.log(len);
+                    c.id = "select" + i_cell + '_' + len;
+                   /* c.onchange = SOUT_Osn_Dop(idt3, i_cell);*/
+                    c.setAttribute("onchange", "SOUT_Osn_Dop(" + len + "," + i_cell + ");");
+                    var opt = document.createElement('option');
+                    opt.value = 3;
+                    opt.id = 3;
+                    opt.innerHTML = 'Дополнительное';
+                    opt.setAttribute("selected", true);
+                    c.appendChild(opt);
+
+
+                    var opt = document.createElement('option');
+                    opt.value = 2;
+                    opt.id = 2;
+                    opt.innerHTML = 'Основное';
+                    c.appendChild(opt);
+
+                    b_input.replaceWith(c);
+                    /*str =' <select id="select' + i_cell + '_' + j + '" onchange="SOUT_Osn_Dop(' + j + ',' + i_cell + ');">  \
+           <option value="'+ cat + '" id = "' + cat + '" >' + 'Дополнительное' + '</option ><option value="' + cot + '" id = "' + cot + '" > ' + 'Основное' + '</option>';
+                    c.innerHTML = str;*/
+                    /*tdrow1.getElementsByTagName('input')[0].append(c);*/
+                   
+                   
+                }
+                SOUT_Osn_Dop(idt3, i_cell);
+
+
+                var tdrow2 = newRow.getElementsByTagName('td')[1];
+                tdrow2.getElementsByTagName('input')[0].value = '';
+                tdrow2.getElementsByTagName('input')[0].removeAttribute("readonly", false);
+
+                var idinp2 = String(tdrow2.getElementsByTagName('input')[0].id);
+                var idin2 = Number(idinp2[idinp2.length - 1]) + 1;
+                tdrow2.getElementsByTagName('input')[0].id = 'textbox_room' + idin2;
+
+                var tdrow3 = newRow.getElementsByTagName('td')[2];
+                var idinp3 = String(tdrow3.getElementsByTagName('select')[0].id);
+                /*var idin3 = Number(idinp3[idinp3.length - 1]) + 1;*/
+                tdrow3.getElementsByTagName('select')[0].id = 'select_get_building_id_' + i_cell + '_'+len;
+                tdrow3.getElementsByTagName('select')[0].removeAttribute("disabled", false);
+                
+                //поменять индекс у кнопки
+                var tdrow4 = newRow.getElementsByTagName('td')[3];
+                /*console.log("button is null", tdrow4.getElementsByTagName('input')[0]);*/
+                if (tdrow4.getElementsByTagName('input')[0] === undefined) {
+                    let n_but = '<input class="button_delete_row btn btn-outline-secondary" title="Удалить расположение" type="button" onclick="deleteRRow(' + i_cell + ',' + len + ');"  value="Удалить"  id="del_ind_place_' + i_cell + '_' + len + '"/>  ';
+                    tdrow4.innerHTML = n_but;
+                }
+                else {
+                    var but = String(tdrow4.getElementsByTagName('input')[0].id);
+                    var butid = Number(but[but.length - 1]) + 1;
+                    tdrow4.getElementsByTagName('input')[0].id = "del_ind_place_" + i_cell + '_' + len;
+                    //onclick изменение онклика при вызове
+                    tdrow4.getElementsByTagName('input')[0].setAttribute("onClick", "deleteRRow(" + i_cell + "," + len + ");");
+                }
+               
+            }
+           
+            else {
+                console.log("ELSE");
+                let nRow = '<tr id ="ind_place_' + i_cell + '_' + (0) + '" >\
+                                                <td id="category'+ 0 + '"><input type="text" id="textbox_category' + 0 + '" name="Name" value=""> </td> \
+                                                <td class="kap_room" id="room'+ 0 + '"><input type="text" id="textbox_room' + 0 + '" name="Name" value=""> </td> \
+                                                <td id="building'+ 0 + '"><input type="text" id="textbox_building' + 0 + '" name="Name" value=""></td>  \
+                                                <td> </td>\
+                                            </tr>';
+                document.getElementById("table_in" + i_cell).innerHTML = nRow;
+            }
+            j = 0;
+            /*Select_SOUT_DisAble_Two(j, i_cell);*/
+        }
+        function cloneRow(row, append, Table_in) {
+            var newRow = row.cloneNode(true);
+            if (append) {
+
+                Table_in.appendChild(newRow);
+
+            }
+            return newRow;
+        }
+
+
+        //var button_del = document.querySelector('.button_del');
+        //button_del.addEventListener('click', function () {
+        //    console.log('del');
+        //    var allRows = document.getElementById('room_tbl').rows;
+        //    if (allRows.length > 1) {
+        //        allRows[allRows.length - 1].remove();
+        //        i_cell = i_cell - 1;
+        //    }
+
+        //});
+        //function DeleteRow(i) {
+
+        //    let str = "somerow" + i;
+        //    var row = document.getElementById(str);
+
+        //    row.parentNode.removeChild(row);
+
+
+
+        //}
+
+
+        var documents_mas = [];
+
+
+        //        var button_add = document.querySelector('.button_add');
+        //        button_add.addEventListener('click', function () {
+        //            //var data_now = date_time();
+        //            i_cell_num = i_cell_num + 1;
+        //            cell += '<tr id="somerow' + i_cell + '">  \
+        //<td "id='+ i_cell + '">' + i_cell_num + '</td> <td> </td> <td> </td> <td> </td> <td> </td>  <td> </td>  <td> <input type="text" id="textbox1' + i_cell + '"name="Name"></td> <td> </td>    </tr>';
+        //            i_cell = i_cell + 1;
+
+        //            document.getElementById('room_tbl').innerHTML = cell;
+
+        //            //const template = document.createElement("template");
+        //            //template.innerHTML = cell;
+        //            //const node = template.content.firstElementChild;
+
+        //            //var foo = document.getElementById("room_tbl");
+        //            //var bar = document.getElementById("room_tbl");
+        //            //var rows = foo.rows;
+        //            //var lastRow = rows[rows.length - 1];
+        //            //var newRow = cloneRow(node, true, bar);
+
+        //            //function cloneRow(row, append, parent) {
+        //            //    var newRow = row.cloneNode(true);
+        //            //    if (append) {
+        //            //        if (parent) {
+        //            //            parent.appendChild(newRow);
+        //            //        }
+        //            //    }
+        //            //    return newRow;
+        //            //}
+
+        //        });
+
+
+
+
+
+        //function zero_first_format(value) {
+        //    if (value < 10) {
+        //        value = '0' + value;
+        //    }
+        //    return value;
+        //}
+
+
+        //function date_time() {
+        //    var current_datetime = new Date();
+        //    var day = zero_first_format(current_datetime.getDate());
+        //    var month = zero_first_format(current_datetime.getMonth() + 1);
+        //    var year = current_datetime.getFullYear();
+        //    var hours = zero_first_format(current_datetime.getHours());
+        //    var minutes = zero_first_format(current_datetime.getMinutes());
+        //    var seconds = zero_first_format(current_datetime.getSeconds());
+
+        //    return day + "." + month + "." + year;
+        //}
+
+
+        //var button_save = document.querySelector('.button_save');
+        //button_save.addEventListener('click', function () {
+        //    console.log("Save");
+        //    let trs = document.querySelectorAll('tr');
+        //    documents_mas = [];
+
+        //    let i = 0;
+
+
+        //    while (i < i_cell) {
+        //        console.log(i, i_cell);
+        //        if (null == document.getElementById('textbox1' + i)) {
+        //            i += 1;
+        //        }
+        //        else {
+        //            var startX = (document.getElementById('textbox1' + i).value);
+        //            /*var startY = (document.getElementById('textbox2' + i).value);*/
+
+
+
+        //            /*var start1 = String(document.getElementById('datnow' + i).innerHTML);*/
+
+
+
+        //            let article = document.getElementById('id_stat' + i).value;
+        //            if (startX != '' && startY != '') {
+        //                d = { "commentary": startX, /*"document": startY, "date": start1,*/ "stat": article };
+        //                documents_mas.push(d);
+        //            }
+        //            i += 1;
+        //        }
+
+
+        //    }
+
+
+
+        //    console.log(documents_mas);
+        //    descr = { "documents": documents_mas }
+        //    json_descr = JSON.stringify(descr);
+        //    var floor_num = -1000;
+        //    var build_id = document.getElementById("select_get_building_id");
+        //    num = build_id.options[build_id.selectedIndex].value;
+        //    build_id = num;
+
+        //    saveBuildingObject(build_id, floor_num, 'building_descr', json_descr);
+
+        //});
+
+
+        create_select("outputSelect");
+
+        function callBackFunc(data) {
+            console.log('callBackFunc' + JSON.stringify(data));
+            Show_res(JSON.stringify(data));
+        }
+
+        function callBackDescr(data) {
+            console.log('callBackDescr' + JSON.stringify(data));
+            if (String(JSON.stringify(data)) != "{}") {
+                Show_table(JSON.stringify(data));
+            }
+            else {
+                //alert("У данного этажа нет комнаты!");
+            }
+
+        }
+        function button_load() {
+            var build_id = document.getElementById("select_get_building_id");
+            num = build_id.options[build_id.selectedIndex].value;
+            console.log("build_id= ", num);
+
+            build_id = num;
+
+            //loadBuildingObject(build_id, -1000, 'building_descr', callBackDescr)
+        }
+
+        function Show_table(mas_descr) {
+            cell = '';
+            cell += '<tr><th>Таблица номер</th><th>ФИО</th><th>Отделение</th><th>Отдел/сектор</th><th>Категория</th> <th>Тип разм</th><th>Комната</th><th>Корпус</th></tr>';
+            console.log(mas_descr.length);
+            i_cell = 0;
+            var mas_descr1 = JSON.parse(mas_descr);
+            var mas_descr2 = mas_descr1["documents"];
+            console.log(mas_descr2.length);
+            console.log(mas_descr2[0].commentary);//пример как получать значение из объекта массива
+            for (i = 0; i < mas_descr2.length; i = i + 1) {
+                cell += '<tr id="somerow' + i_cell + '">    <td><input type="text" value=' + mas_descr2[i].commentary + ' id="textbox1' + i + '"name="Name"></td>   <td><input type="text" value=' + mas_descr2[i].document + ' id="textbox2' + i + '"name="Name"></td> <td id="datnow' + i + '" value="' + mas_descr2[i].date + '">' + mas_descr2[i].date + '</td> <td>   <select id = "id_stat' + i + '">   <option value="' + mas_descr2[i].stat + '">' + mas_descr2[i].stat + '</option>  </select>       </td><td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i_cell + '"value="-"/>        </td> </tr>';
+                i_cell += 1;
+                document.getElementById('room_tbl').innerHTML = cell;
+            }
+        }
+</script>
+	<script>
+        button_start(100000);
+    </script>
+
+</body>
+
+</html>

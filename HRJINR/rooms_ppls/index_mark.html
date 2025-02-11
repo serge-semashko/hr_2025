@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <title>LIT</title>
+    <link rel="stylesheet" href="css/kap_style.css">
+    <link rel="stylesheet" href="css/leaflet.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.4.0.js"></script>
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet/Leaflet.Editable.js"></script>
+    <script src="js/leaflet/Leaflet.ImageOverlay.Rotated.js"></script>
+    <script src="js/server.js"></script>
+    <style>
+        .leaflet-container {
+            height: 98%;
+            width: 98%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .leaflet-tooltip-top:before,
+        .leaflet-tooltip-bottom:before,
+        .leaflet-tooltip-left:before,
+        .leaflet-tooltip-right:before {}
+
+        .lhep_obj_tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: transparent;
+            text-shadow: 1px 1px 2px black, 0 0 1em red;
+            /* Параметры тени */
+            color: white;
+            /* Белый цвет текста */
+            font-size: 1em;
+            /* Размер надписи */
+            border: none
+        }
+
+        .leaflet-tooltip-left.myCSSClass::before {
+            border-left-color: cyan;
+        }
+
+        .leaflet-tooltip-right.myCSSClass::before {
+            border-right-color: cyan;
+        }
+    </style>
+</head>
+
+<body class="kap_page">
+    <h1>Изменить тип маркера</h1>
+    <div class="kap_flex-row">
+
+            <div class="kap_table">
+                <div id="outputTypeSelect"></div>
+                    <!-- <legend>Выберите действие:</legend>
+                    <div>
+                        <input type="radio" id="change_type" name="radio" onclick="clickRadio(this)" value="change_type">
+                        <label for="change_type">Изменить тип маркера</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="add_type" name="radio" onclick="clickRadio(this)" value="add_type">
+                        <label for="add_type">Создать новый тип маркера</label>
+                    </div> -->
+                <input class="kap_button_style" title="Изменить тип" class="button_look" type="button" onclick="ChangeTypeMarker()" value="Изменить тип маркера"/>
+                <input class="kap_button_style" title="Добавить новый тип" class="button_look" type="button" onclick="AddTypeMarker()" value="Добавить новый тип маркера"/>
+                <input class="kap_button_style" id = "save_button" title="Сохранить тип маркера" class="button_look" type="button" onclick="SaveTypeMarker()" value="Сохранить тип маркера"/>
+                <table class="kap_tab_style" id="new_icon_tbl">
+                    <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Тип</th>
+                            <th>Картинка</th>
+                            <th>Комм-рий</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                            <input type="text" id="obj_name" placeholder="введ. имя" size="10"> </td>
+                            <td>
+                                <input type="text" id="obj_type" placeholder="введ. тип" size="10"> </td>
+                            <td>
+                                <input  type="file" name="myImage_icon" id="fileName_icon" onchange="load_image_icon(this)" accept=".png, .pdf, .tiff, .jpg" />
+                            </td>
+                            <td>
+                                <input type="text" id="obj_comm" placeholder="введ. тип" size="10"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            
+    </div>
+    
+</body>
+
+    <script>
+        create_type_select("outputTypeSelect");
+        var file;
+        var image1;
+
+        var obj_type_old;
+        var obj_name_old;
+
+        // function clickRadio(el) {
+        //     var siblings = document.querySelectorAll("input[type='radio'][name='" + el.name + "']");
+        //     for (var i = 0; i < siblings.length; i++) {
+        //         if (siblings[i] != el)
+        //         siblings[i].oldChecked = false;
+        //     }
+        //     if (el.oldChecked)
+        //         el.checked = false;
+        //     el.oldChecked = el.checked;
+        //     if(el.checked && el.id=="change_type"){
+        //         ChangeTypeMarker();
+        //     }
+        //     else if(el.checked && el.id=="add_type"){
+        //         AddTypeMarker();
+        //     }
+        // }
+
+        function load_image_icon(input){
+            let file = input.files[0];
+            console.log(file);
+            if(document.getElementById('img')){
+                console.log('image have');
+                let img = document.getElementById('img');
+                img.src = window.URL.createObjectURL(file);
+                if (img.style.height> "100px" || img.style.width > "80px"){
+                    img.style.height = '100px';
+                    img.style.width = "80px";
+                }
+            }
+            else{
+                console.log('no image');
+                image1 = document.createElement('img');
+                image1.id = 'img';
+                image1.src=window.URL.createObjectURL(file);
+                if (image1.style.height> "100px" || image1.style.width > "80px"){
+                    image1.style.height = '100px';
+                    image1.style.width = "80px";
+                }
+                document.querySelector('body').appendChild(image1);
+            }
+        }
+
+        let marker_type = document.getElementById('select_get_types');
+
+        // marker_type.onchange = function (event){
+
+        //     let target = event.target;
+        //     if (document.getElementById('change_type').checked == true){
+        //         console.log('change_icon true');
+        //         ChangeTypeMarker();
+        //     }
+            
+        // }
+      
+        function ChangeTypeMarker(){
+            ClearTypeTable();
+            document.getElementById('save_button').disabled=false;
+            let obj = document.getElementById('select_get_types');
+            obj_type = obj.options[obj.selectedIndex].value;
+            obj_name = obj.options[obj.selectedIndex].text;
+
+            obj_type_old = obj_type;
+            obj_name_old = obj_name;
+
+            console.log("onchange "+obj_type);
+            document.getElementById('obj_name').value = obj_name;
+            document.getElementById('obj_type').disabled = true;
+            document.getElementById('obj_type').value = obj_type;
+            get_commentary(obj_type, obj_name);
+            
+            let url1 = ' https://lt-svr230.jinr.ru:8082/get_icon?' + "object_type=" + obj_type.toString() + "&object_name=" + obj_name.toString();
+                fetch(url1).then((response) => {
+                    if (response.ok) {
+                        console.log('connected');
+                        return response.text();
+                    }
+                }).then((data) => {
+
+                    if(document.getElementById('img')){
+                        let img = document.getElementById('img');
+                        img.src = url1;
+                        if (img.style.height> "100px" || img.style.width > "80px"){
+                        img.style.height = '100px';
+                         img.style.width = "80px";
+                        }
+                    }
+                    else{
+                        image1 = document.createElement('img');
+                        image1.id = 'img';
+                        image1.src=url1;
+                        if (image1.style.height> "100px" || image1.style.width > "80px"){
+                        image1.style.height = '100px';
+                        image1.style.width = "80px";
+                        }
+                        document.querySelector('body').appendChild(image1);
+                    }
+                    
+                });
+        }
+
+        function AddTypeMarker(){
+            ClearTypeTable();
+            document.getElementById('save_button').disabled=false;
+            document.getElementById('obj_type').disabled = false;
+        }
+        
+        function SaveTypeMarker() {
+            console.log(obj_type_old + ' ' + obj_name_old);
+            obj = document.getElementById('select_get_types');
+            let obj_name = document.getElementById('obj_name').value;
+            let obj_type = document.getElementById('obj_type').value;
+            let img = document.getElementById('fileName_icon');
+            let obj_comm = document.getElementById('obj_comm').value;
+            if (obj_comm != ""){
+                obj_comm = {"commentary": obj_comm};
+            }
+            console.log(JSON.stringify(obj_comm));
+
+            if((obj_name && obj_type) != ''){
+
+                if(obj.querySelector('[value="' + obj_type + '"]')){
+                    change_type(obj_type_old, obj_name_old, obj_name, JSON.stringify(obj_comm));
+                }
+                else{
+                    if (img.files.length == 0){
+                        alert('для создания нового типа нужно выбрать изображение')
+                    } else {
+                        new_type(obj_type, obj_name, JSON.stringify(obj_comm));
+                    }
+                }
+
+            }else{
+                alert('поля не должны быть пустыми');
+            }
+            ClearTypeTable();
+        }
+
+        function ClearTypeTable(){
+            document.getElementById('save_button').disabled=true;
+            document.getElementById('obj_name').value = '';
+            document.getElementById('obj_type').value = '';
+            document.getElementById('obj_comm').value = '';
+            document.getElementById('fileName_icon').value = '';
+            if(document.getElementById('img')){
+                let img = document.getElementById('img');
+            img.parentNode.removeChild(img);
+            }
+            
+        }
+
+    </script>
+</html>

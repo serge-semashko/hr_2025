@@ -1,0 +1,229 @@
+SELECT
+round(  sum( ( #cur_year# -   year( [DataRojd]))*[Stavka]) / sum([Stavka]),1) as meanage #cur_year#,
+sum([Stavka]) as stavok #cur_year#
+from
+(
+SELECT
+[ДАТА_РОЖД] as DataRojd,
+фио,
+[ТАБНОМ] as tab_n,
+[ПОДРАЗДЕЛЕНИЕ1С] as div_code,
+[ГРАФИК] ,
+case [ГРАФИК]
+when 'Смена 12 часов (2 по 12ч.)' then 1
+when 'Смена 24 ч(Сменный с годовым суммированым учетом)' then 1
+when 'Смена 4 часа (5 по 4ч.)' then 1
+when 'Смена 8 часов (3 по 8ч.)' then 1
+when 'СменаГ(Сменный с годовым суммированным учетом)' then 1
+when 'СменаК(Сменный с квартальным суммированным учетом)' then 1
+when 'СменаМ(Сменный с месячным суммированным учетом)' then 1
+when '1 час 12 минут (1ч. 12мин.)' then 0.2
+when '48 минут (48мин.)' then 0.1
+when '8 часов (8ч. then пн)' then 0.2
+when '2 часа (2ч.)' then 0.25
+when '5 часов (5ч. then пн;вт)' then 0.25
+when '2 часа 40 минут (2ч. 40мин.)' then 0.33
+when '3 часа 12 минут (3ч. 12мин.)' then 0.4
+when '20 часов в неделю (8ч. then 8ч. then 4ч. then пн;вт;ср)' then 0.5
+when '3 часа 36 минут (3ч. 36мин.)' then 0.5
+when '4 часа (4ч.)' then 0.5
+when '5 часов - РВУ (5ч.)' then 0.7
+when '7 часов (7ч.)' then 0.88
+when '6 часов (6ч.)' then 0.75
+when '7 часов (7ч. then  инв.)' then 1
+when '7 часов 12 минут (7ч. 12мин.)' then 1
+when '8 часов (8ч. then пн;вт;ср;чт)' then 0.8
+when 'Пятидневка по 8 часов (8ч.)' then 1
+when '8 часов (8ч.,пн;вт;ср;чт)' then 1
+when '7 часов (7ч., инв.)' then 1
+when '8 часов (8ч.,пн)' then 0.2
+when '5 часов (5ч.,пн;вт)' then 0.25
+when '20 часов в неделю (8ч.,8ч.,4ч.,пн;вт;ср)' then 0.5
+when '5 часов (5ч.)' then 0.5
+when '20 часов в неделю (4ч. then 8ч. then 8ч. then пн;ср;чт)' then 0.5
+when '3 часа (3ч.)' then 0.4
+when '20 часов в неделю (4ч.,8ч.,8ч.,пн;ср;чт)' then 0.5
+when '5 часов 46 минут (5ч. 46мин.)' then 0.72
+when '6 часов 24 минуты (6ч.24мин.)' then 0.8
+when '8 часов (8ч.,пт)' then 1
+else '-10000000'
+end as stavka
+FROM Sotrudniki_ #cur_year# s where  podr1=100000
+
+) as tmp
+where stavka is not null;
+
+
+
+
+
+SELECT
+round(  sum( ( #cur_year# -   year( [DataRojd]))*[Stavka]) / sum([Stavka]),1) as c_meanage #cur_year#,
+sum([Stavka]) as c_stavok #cur_year#
+from
+(
+SELECT
+[ДАТА_РОЖД] as DataRojd,
+фио,
+[ТАБНОМ] as tab_n,
+[ПОДРАЗДЕЛЕНИЕ1С] as div_code,
+[ГРАФИК] ,
+case [ГРАФИК]
+when 'Смена 12 часов (2 по 12ч.)' then 1
+when 'Смена 24 ч(Сменный с годовым суммированым учетом)' then 1
+when 'Смена 4 часа (5 по 4ч.)' then 1
+when 'Смена 8 часов (3 по 8ч.)' then 1
+when 'СменаГ(Сменный с годовым суммированным учетом)' then 1
+when 'СменаК(Сменный с квартальным суммированным учетом)' then 1
+when 'СменаМ(Сменный с месячным суммированным учетом)' then 1
+when '1 час 12 минут (1ч. 12мин.)' then 0.2
+when '48 минут (48мин.)' then 0.1
+when '8 часов (8ч. then пн)' then 0.2
+when '2 часа (2ч.)' then 0.25
+when '5 часов (5ч. then пн;вт)' then 0.25
+when '2 часа 40 минут (2ч. 40мин.)' then 0.33
+when '3 часа 12 минут (3ч. 12мин.)' then 0.4
+when '20 часов в неделю (8ч. then 8ч. then 4ч. then пн;вт;ср)' then 0.5
+when '3 часа 36 минут (3ч. 36мин.)' then 0.5
+when '4 часа (4ч.)' then 0.5
+when '5 часов - РВУ (5ч.)' then 0.7
+when '7 часов (7ч.)' then 0.88
+when '6 часов (6ч.)' then 0.75
+when '7 часов (7ч. then  инв.)' then 1
+when '7 часов 12 минут (7ч. 12мин.)' then 1
+when '8 часов (8ч. then пн;вт;ср;чт)' then 0.8
+when 'Пятидневка по 8 часов (8ч.)' then 1
+when '8 часов (8ч.,пн;вт;ср;чт)' then 1
+when '7 часов (7ч., инв.)' then 1
+when '8 часов (8ч.,пн)' then 0.2
+when '5 часов (5ч.,пн;вт)' then 0.25
+when '20 часов в неделю (8ч.,8ч.,4ч.,пн;вт;ср)' then 0.5
+when '5 часов (5ч.)' then 0.5
+when '20 часов в неделю (4ч. then 8ч. then 8ч. then пн;ср;чт)' then 0.5
+when '3 часа (3ч.)' then 0.4
+when '20 часов в неделю (4ч.,8ч.,8ч.,пн;ср;чт)' then 0.5
+when '5 часов 46 минут (5ч. 46мин.)' then 0.72
+when '6 часов 24 минуты (6ч.24мин.)' then 0.8
+when '8 часов (8ч.,пт)' then 1
+else '-10000000'
+end as stavka
+FROM Sotrudniki_ #cur_year# s where  podr1=100000
+and  s.ТАБНОМ in (select sold.ТАБНОМ FROM Sotrudniki_ #prev_year# sold where  podr1=100000)
+) as tmp
+where stavka is not null;
+
+
+
+SELECT
+round(  sum( ( #cur_year# -   year( [DataRojd]))*[Stavka]) / sum([Stavka]),1) as n_meanage #cur_year#,
+sum([Stavka]) as n_stavok #cur_year#
+from
+(
+SELECT
+[ДАТА_РОЖД] as DataRojd,
+фио,
+[ТАБНОМ] as tab_n,
+[ПОДРАЗДЕЛЕНИЕ1С] as div_code,
+[ГРАФИК] ,
+case [ГРАФИК]
+when 'Смена 12 часов (2 по 12ч.)' then 1
+when 'Смена 24 ч(Сменный с годовым суммированым учетом)' then 1
+when 'Смена 4 часа (5 по 4ч.)' then 1
+when 'Смена 8 часов (3 по 8ч.)' then 1
+when 'СменаГ(Сменный с годовым суммированным учетом)' then 1
+when 'СменаК(Сменный с квартальным суммированным учетом)' then 1
+when 'СменаМ(Сменный с месячным суммированным учетом)' then 1
+when '1 час 12 минут (1ч. 12мин.)' then 0.2
+when '48 минут (48мин.)' then 0.1
+when '8 часов (8ч. then пн)' then 0.2
+when '2 часа (2ч.)' then 0.25
+when '5 часов (5ч. then пн;вт)' then 0.25
+when '2 часа 40 минут (2ч. 40мин.)' then 0.33
+when '3 часа 12 минут (3ч. 12мин.)' then 0.4
+when '20 часов в неделю (8ч. then 8ч. then 4ч. then пн;вт;ср)' then 0.5
+when '3 часа 36 минут (3ч. 36мин.)' then 0.5
+when '4 часа (4ч.)' then 0.5
+when '5 часов - РВУ (5ч.)' then 0.7
+when '7 часов (7ч.)' then 0.88
+when '6 часов (6ч.)' then 0.75
+when '7 часов (7ч. then  инв.)' then 1
+when '7 часов 12 минут (7ч. 12мин.)' then 1
+when '8 часов (8ч. then пн;вт;ср;чт)' then 0.8
+when 'Пятидневка по 8 часов (8ч.)' then 1
+when '8 часов (8ч.,пн;вт;ср;чт)' then 1
+when '7 часов (7ч., инв.)' then 1
+when '8 часов (8ч.,пн)' then 0.2
+when '5 часов (5ч.,пн;вт)' then 0.25
+when '20 часов в неделю (8ч.,8ч.,4ч.,пн;вт;ср)' then 0.5
+when '5 часов (5ч.)' then 0.5
+when '20 часов в неделю (4ч. then 8ч. then 8ч. then пн;ср;чт)' then 0.5
+when '3 часа (3ч.)' then 0.4
+when '20 часов в неделю (4ч.,8ч.,8ч.,пн;ср;чт)' then 0.5
+when '5 часов 46 минут (5ч. 46мин.)' then 0.72
+when '6 часов 24 минуты (6ч.24мин.)' then 0.8
+when '8 часов (8ч.,пт)' then 1
+else '-10000000'
+end as stavka
+FROM Sotrudniki_ #cur_year# s where  podr1=100000
+and  s.ТАБНОМ not in (select sold.ТАБНОМ FROM Sotrudniki_ #prev_year# sold where  podr1=100000)
+) as tmp
+where stavka is not null;
+
+SELECT
+round(  sum( ( #cur_year# -   year( [DataRojd]))*[Stavka]) / sum([Stavka]),1) as uv_meanage #cur_year#,
+sum([Stavka]) as uv_stavok #cur_year#
+from
+(
+SELECT
+[ДАТА_РОЖД] as DataRojd,
+фио,
+[ТАБНОМ] as tab_n,
+[ПОДРАЗДЕЛЕНИЕ1С] as div_code,
+[ГРАФИК] ,
+case [ГРАФИК]
+when 'Смена 12 часов (2 по 12ч.)' then 1
+when 'Смена 24 ч(Сменный с годовым суммированым учетом)' then 1
+when 'Смена 4 часа (5 по 4ч.)' then 1
+when 'Смена 8 часов (3 по 8ч.)' then 1
+when 'СменаГ(Сменный с годовым суммированным учетом)' then 1
+when 'СменаК(Сменный с квартальным суммированным учетом)' then 1
+when 'СменаМ(Сменный с месячным суммированным учетом)' then 1
+when '1 час 12 минут (1ч. 12мин.)' then 0.2
+when '48 минут (48мин.)' then 0.1
+when '8 часов (8ч. then пн)' then 0.2
+when '2 часа (2ч.)' then 0.25
+when '5 часов (5ч. then пн;вт)' then 0.25
+when '2 часа 40 минут (2ч. 40мин.)' then 0.33
+when '3 часа 12 минут (3ч. 12мин.)' then 0.4
+when '20 часов в неделю (8ч. then 8ч. then 4ч. then пн;вт;ср)' then 0.5
+when '3 часа 36 минут (3ч. 36мин.)' then 0.5
+when '4 часа (4ч.)' then 0.5
+when '5 часов - РВУ (5ч.)' then 0.7
+when '7 часов (7ч.)' then 0.88
+when '6 часов (6ч.)' then 0.75
+when '7 часов (7ч. then  инв.)' then 1
+when '7 часов 12 минут (7ч. 12мин.)' then 1
+when '8 часов (8ч. then пн;вт;ср;чт)' then 0.8
+when 'Пятидневка по 8 часов (8ч.)' then 1
+when '8 часов (8ч.,пн;вт;ср;чт)' then 1
+when '7 часов (7ч., инв.)' then 1
+when '8 часов (8ч.,пн)' then 0.2
+when '5 часов (5ч.,пн;вт)' then 0.25
+when '20 часов в неделю (8ч.,8ч.,4ч.,пн;вт;ср)' then 0.5
+when '5 часов (5ч.)' then 0.5
+when '20 часов в неделю (4ч. then 8ч. then 8ч. then пн;ср;чт)' then 0.5
+when '3 часа (3ч.)' then 0.4
+when '20 часов в неделю (4ч.,8ч.,8ч.,пн;ср;чт)' then 0.5
+when '5 часов 46 минут (5ч. 46мин.)' then 0.72
+when '6 часов 24 минуты (6ч.24мин.)' then 0.8
+when '8 часов (8ч.,пт)' then 1
+else '-10000000'
+end as stavka
+FROM Sotrudniki_ #prev_year# s where  podr1=100000
+and  s.ТАБНОМ not in (select sold.ТАБНОМ FROM Sotrudniki_ #cur_year# sold where  podr1=100000)
+) as tmp
+where stavka is not null;
+
+
+
+

@@ -1,0 +1,342 @@
+body {
+    min-width: 1000px;
+    margin: 0;
+    padding: 0;
+}
+
+.clearfix:after {
+    content: '';
+    clear: both;
+    display: table;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+.container:after {
+    content: '';
+    clear: both;
+    display: table;
+}
+
+
+/*.menu__close {
+    display: none;
+}
+
+.menu__container {
+    display: none;
+}
+
+.menu_open .menu__close {
+    display: block;
+}
+
+.menu_open .menu__open {
+    display: none;
+}
+
+.menu_open .menu__container {
+    display: block;
+}*/
+
+
+/*HEADER*/
+
+.main-header {
+    padding: 15px;
+    background: lightgray;
+}
+
+.header {
+    min-height: 50px;
+}
+
+.header::after {
+    display: table;
+    clear: both;
+    content: "";
+}
+
+.logo {
+    float: left;
+    margin-left: 50px;
+    width: 250px;
+    height: 85px;
+}
+
+.logo img {
+    display: block;
+}
+
+.main-menu {
+    float: right;
+    padding-right: 50px;
+    width: 650px;
+    margin: 30px;
+    text-align: center;
+}
+
+.main-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-menu li {
+    display: inline-block;
+    margin-right: 60px;
+    vertical-align: top;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.main-menu li:last-child {
+    margin-right: 0;
+}
+
+.main-menu a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.main-menu a:hover {
+    text-decoration: underline;
+}
+
+.main-menu a:active {
+    text-decoration: none;
+    opacity: 0.3;
+}
+
+
+/*STRUCTURA_LIT*/
+
+.structure {
+    margin: 5px;
+}
+
+.block1 {
+    float: left;
+    /*    border: 2px solid grey;*/
+}
+
+.structure .layout-column1 {
+    width: 450px;
+    min-height: 100%;
+}
+
+.structure .layout-column2 {
+    width: 450px;
+    min-height: 100%;
+}
+
+.block2 {
+    margin-left: 460px;
+    /*    border: 2px solid red;*/
+}
+
+.structure .layout-column3 {
+    height: 839px;
+    width: 1438px;
+    max-width: 100%;
+    max-height: 100%;
+    background: yellow;
+}
+
+.structure .layout-column:last-child {
+    margin-right: 0;
+}
+
+.feature {
+    padding: 5px;
+    text-align: left;
+}
+
+.feature h2 {
+    text-align: center;
+}
+
+.menu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 400px;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 5px 0px;
+    padding-left: 25px;
+    list-style: none;
+}
+
+.structure .layout-column4 {
+    width: 450px;
+    min-height: 100%;
+}
+
+.layout-column4 a {
+    display: block;
+    margin-bottom: -5px;
+    padding: 6px 20px;
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.tablica {
+    position: absolute;
+    top: 120px;
+    left: 465px;
+    height: 848px;
+    width: 1455px;
+    max-width: 100%;
+    max-height: 100%;
+    background: #778899;
+    overflow: auto;
+    z-index: 2000;
+}
+
+table {
+    width: 50%;
+    border-collapse: collapse;
+    align-content: center;
+    border: 1px solid grey;
+    margin: 15px;
+}
+
+.structure .layout-column5 {
+    width: 450px;
+    min-height: 100%;
+}
+
+.structure .layout-column6 {
+    width: 450px;
+    min-height: 100%;
+}
+
+#outputSelect {
+    /*    display: flex;
+*/
+    display: inline-block;
+    padding-left: 15px;
+}
+
+#select_get_building_id {
+    width: 50px;
+}
+
+#selectFloorId {
+    width: 50px;
+}
+
+label {
+    font-size: 25px;
+}
+
+#label {
+    font-family: 'Avantgarde';
+    /*display: flex;*/
+    padding-left: 15px;
+    font-size: 25px;
+    display: inline-block;
+}
+
+
+/* границы €чеек первого р€да таблицы */
+
+th {
+    font-weight: bold;
+    padding: 5px;
+    background: #D6F1DD;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Avantgarde';
+    border: 1px solid grey;
+    background-color: #C8FFD7;
+}
+
+h1 {
+    font-size: 38px;
+    margin-left: 15px;
+    font-family: 'Avantgarde';
+}
+
+button {
+    font-family: 'Avantgarde';
+    font-size: 20px;
+    margin-left: 15px;
+    background-color: #D6F1DD;
+    border: 1px solid grey;
+}
+
+#butt_first_list {
+    font-size: large;
+}
+
+.button_del_row {
+    font-size: 15px;
+}
+
+
+/* границы €чеек тела таблицы */
+
+input {
+    display: inline-block;
+    /*display: flex;*/
+    flex-direction: row;
+    font-size: large;
+    font-family: 'Avantgarde';
+    /*width: 80%;*/
+}
+
+.button_prov {
+    display: none;
+}
+
+select {
+    font-size: 15px;
+}
+
+td {
+    padding: 5px;
+    border: 1px solid grey;
+    text-align: center;
+    font-size: 15px;
+}
+
+#button_close-table {
+    display: none;
+}
+
+#tablica_zd__display {
+    display: none;
+}
+
+.button_del_row {
+    font-family: 'Avantgarde';
+    font-size: large;
+    background-color: #D6F1DD;
+    border: 1px solid grey;
+    text-align: center;
+}
+
+.button_look {
+    /*  display: flex;
+    flex-direction: row;*/
+    margin: 5px;
+    font-family: 'Avantgarde';
+    font-size: large;
+    background-color: #D6F1DD;
+    border: 1px solid grey;
+}
+
+.mas_button {
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

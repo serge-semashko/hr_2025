@@ -1,0 +1,330 @@
+        @font-face {
+        font-family: GillSansNova;       
+        src: url("/css/GillSansNova.ttf")
+        format("truetype");
+        }
+        body {
+            background: #E5EBEA;
+            margin: 0;
+        }        
+        .GillSansNova{
+            font-family: "GillSansNova";
+            color:#363A42;
+        }    
+        .header {
+            width: 100%;           
+            vertical-align: middle;
+        }
+        .logotip { 
+            width: 100px;
+            }
+        .logotip img { 
+            padding: 0 0 0 20px; 
+            height: 50px;
+            margin-bottom: 6px;
+            }
+        .name-site { 
+            color: #E5EBEA;
+            font-size: 25px;              
+            padding-right: 20px;              
+            padding-top: 17px;
+        }
+        .enter { 
+            font-size: 23px; 
+            text-align: center; 
+            padding: 5px 15px 5px 15px;  
+            font-weight: 600; 
+            margin: 15px 15px 15px 0; 
+            color: #E5EBEA;
+            float: right;
+            border: 1px solid #E5EBEA;
+            border-radius: 14px;
+            text-decoration: none;
+            }
+            
+        .enter:hover {
+            background: #E5EBEA;
+            color: #363A42;
+            } 
+        .tab_logo tr td {
+            background: #003249;
+            border: 0px solid red;
+        }
+        .tab_logo{
+            border-collapse: collapse;
+            width:100%;
+        }        
+        .tab-menu {
+            border-collapse: collapse;
+            margin: auto; 
+            color: #E5EBEA;
+            width: 93%;
+        }          
+         
+        .tab-menu tr td {
+            text-align: center;
+            font-size: 17px;
+            background: #B8C496;
+            color: #363A42;
+            font-weight: 700;
+        }  
+        .tab-menu tr td a{
+            margin: 20px 13px;
+            text-decoration: none;
+            color: #363A42;
+            box-sizing: border-box;
+            line-height: 2.0;
+            padding: 3px 13px 5px 13px;
+
+        }
+        .tab-menu tr td a:hover{     
+            
+        }
+        .active, .tab-menu tr td a:hover {
+            color: #363A42;            
+            text-decoration: none;
+            border-radius: 9px;
+            background: white;
+            padding: 3px 13px 5px 13px;
+            font-weight: 700;
+        }
+ 
+        .shadowbox {
+            width: 750px;
+            border: 2px solid #003249;           
+            background: #C9D7E9;           
+            margin: 19px auto 0 auto;
+            padding: 10px 10px 10px 20px;
+            border-radius: 25px;            
+            }
+         .inp-search {
+            border: 2px solid #003249;
+            border-radius: 5px;
+            background: #FFFFFF;
+            
+            }
+         .tab-search tr td {
+           border: 0px solid red;
+           padding: 2px 0 0 5px;
+           color: #363A42;
+           font-size: 16px;
+            }
+         .select-tab {
+            border: 2px solid #003249;
+            border-radius: 5px;
+            background: #FFFFFF;
+            }
+         .two-table {
+             border: 2px solid #003249; 
+             background: #E5EBEA;
+             padding: 10px;             
+             border-radius: 25px;
+             margin: auto;
+            }
+            .two-table tr td {
+                border: none;
+            }
+            .button-search {
+                border: 2px solid #003249;
+                background: #DADEC6;
+                margin: auto;
+                padding: 3px;
+                border-radius: 7px;
+                width: 80px;
+                font-weight: 700;                
+            }
+            
+            .shadowbox-table {
+               padding: 10px 20px 0 20px;
+            }
+            
+            .table-three tr td {               
+               width: auto;                        
+               background-color: #C9D7E9;
+               border-radius: 10px;
+               padding: 7px;
+               border: 2px solid #64808D;
+               
+            }
+            .table-three tr td:hover {
+                background: #FFFFFF;
+                cursor: pointer;
+            }
+            
+            .table-three3 tr td:hover {
+                background: #FFFFFF;
+                cursor: auto;
+            }
+            
+            .table-three {
+                border-spacing: 7px 11px;
+            }
+            
+            .table-three2 tr td {               
+               border: 1px solid #6B7383;           
+               background-color: #FFFFFF;
+               padding: 3px;
+               font-size: 14px;
+               border-radius: 0;
+               width: 120px;
+               line-height: 1.0;
+            }
+            
+            .table-three2 {
+               border: 1px solid #6B7383;   
+               border-spacing: 0;
+               border-bottom-right-radius: 10px;
+               border-bottom-left-radius: 10px;
+               border-top-right-radius: 10px;
+               margin: 7px 0 0 -7px;
+               cursor: auto;
+               
+            }
+            
+            .table-three3 {
+               border: 1px solid #6B7383;   
+               border-spacing: 0;
+               border-bottom-right-radius: 10px;
+               border-bottom-left-radius: 10px;
+               border-top-left-radius: 10px;
+               margin: 7px 0 0 -7px;
+               cursor: auto;
+               line-height: 1.0;
+            }
+            
+             .table-three3 tr td {               
+               border: 1px solid #6B7383;           
+               background-color: #FFFFFF;
+               padding: 3px;
+               font-size: 14px; 
+               border-radius: 0;
+               width: 120px;
+            }
+            
+            .shadowbox-table2 {              
+               width: auto;                       
+               margin: 10px 10px 0 10px;               
+               font-size: 16px;
+               color: #FCF6F7;
+            }
+            
+            .table-four tr td{
+               border-left: 1px solid #6B7383; 
+               border-right: 1px solid #6B7383; 
+               padding: 3px;
+            }
+            
+            .table-four tr th {
+               border-left: 2px solid #6B7383; 
+               border-right: 2px solid #6B7383; 
+               border-top: 2px solid #6B7383;
+               padding: 3px;
+               background-color: #0F3D59;
+               color: #FCF6F7;
+               font-weight: 500;
+               line-height: 1.0;
+               text-align: center;
+            }
+            .table-four tr:hover  {
+                background: #DADEC6;
+                cursor: pointer;
+            }            
+            .table-four >tbody>tr:nth-of-type(odd):hover  {
+                background: #DADEC6;
+                cursor: pointer;
+            }   
+            .table-four {      
+               border-collapse:collapse;
+               border: 1px solid #FFFFFF; 
+               width: 98%;
+               margin: 0 auto;
+            }
+            .ui-tabs {
+                padding: 0;
+            }
+            .table-four>tbody>tr {
+                background-color:#FCF6F7;
+            }
+            .table-four>tbody>tr:nth-of-type(odd){
+                background-color: #C9D7E9;
+            }
+            .button5 {
+                background: #465D6F; 
+                border-radius: 15px; 
+                width: 25px; 
+                height: 25px; 
+                margin: 5px 2px 6px 4px;
+                padding: 3px 0 3px 2px; 
+            }
+            
+            .modalDialog {
+                 position: absolute;
+                 top: 0;
+                 right: 0;
+                 bottom: 0;
+                 left: 0;
+                 background: rgba(0,0,0,0.8);
+                 z-index: 99999;
+                 display: none;
+                
+            }
+            .modalDialog:target {                
+                pointer-events: auto;                
+            }
+
+            .modalDialog > div {
+                 width: 700px;
+                 position: relative;
+                 margin: 10% auto;
+                 padding: 5px 20px 13px 20px;
+                 border-radius: 10px;
+                 background: #fff;
+                 background: -moz-linear-gradient(#fff, #999);
+                 background: -webkit-linear-gradient(#C9D7E9, #FCF6F7);
+                 background: -o-linear-gradient(#fff, #999);
+            }
+            
+            .close {
+                background: #606061;
+                color: #FFFFFF;
+                line-height: 25px;
+                position: absolute;
+                right: -12px;
+                text-align: center;
+                top: -10px;
+                width: 24px;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            
+            .close:hover {
+                background: #8E9AAF;
+            }
+            
+            .table-five tr td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding: 5px 20px 2px 20px;              
+                
+            }
+            
+            .button-search:hover {
+                background: #8E9AAF;
+            }
+            
+            
+            tr td.slider-on {
+                border: 2px solid #6B7383;  
+                background-color: #FFFFFF;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+            .sl-div {
+                text-align: left; 
+                height: 100px; 
+                float: left;
+                background: #FCF6F7;
+                margin: 10px;
+                padding: 10px;
+                border-radius: 10px;
+            }

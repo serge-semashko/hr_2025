@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/leaflet.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.4.0.js"></script>
+    <script src="js/js.js"></script>
+    <script src="js/js.cookie.js"></script>
+
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet/Leaflet.Editable.js"></script>
+    <script src="js/leaflet/Leaflet.ImageOverlay.Rotated.js"></script>
+    <script src="js/server.js"></script>
+    <title>Заполнение информации о здании</title>
+</head>
+<body>
+    <h1>Заполнение информации о здании</h1>
+    <label id="label" for="selectBuildId">Здание: </label>
+    <div id="outputSelect"></div>
+    <div class="tablica_zd" id="tablica_zd__display" style="display:block;">
+        <table id="room_tbl">
+            <tbody id="bar">
+            </tbody>
+        </table>
+        <button class="button_add" title="Добавить строку">Добавить</button>
+        <!-- <button class="button_prov" >Проверка данных</button>-->
+        <button class="button_save" title="Сохранить данные из таблицы">Cохранить</button>
+        <button class="button_del" title="Удалить последнюю строку">Удалить</button>
+       <!-- <button class="button_load" title="Загрузить всю таблицу" onclick="button_load()">Загрузить</button>-->
+        <!--<button class="button_all_del" title="Очистить всю таблицу" onclick="DrawCell()">Очистить</button>-->
+    </div>
+    <script>
+        function buildingChange() {
+            console.log("buildingChange");
+
+            button_load();
+
+        }
+
+
+        var cell = '';
+        var i_cell = 0;
+        DrawCell();
+        var flagi = 0;
+        function DrawCell() {
+            console.log('ok');
+
+            var tbl = document.getElementById('room_tbl');
+            var data_now = date_time();
+            //cell += '<th style="width: 200px;">Coordinates</th>';
+            cell += '<tr><th>Коментарий</th><th>Документ (HTTP ссылка)</th><th>Дата изменения</th> <th>Статья </th> <th>Удалить</th></tr>';
+            cell += '<tr id="somerow' + i_cell +'">  \
+<td><input type="text" id="textbox1' + i_cell + '"name="Name"></td>    <td><input type="text" id="textbox2' + i_cell + '"name="Name"></td> <td id="datnow' + i_cell +'" value="' + data_now +'">' + data_now + '</td> <td><select id = "id_stat' + i_cell + '">   <option value="14">14</option> <option value="19">19</option>  </select> </td> <td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i_cell + '"value="-"/>        </td>  </tr>';
+            i_cell = 1;
+            var k = 2;
+            document.getElementById('room_tbl').innerHTML = cell;
+            console.log('ok');
+
+        }
+        //function button_all_del(){
+
+        //}
+        var button_del = document.querySelector('.button_del');
+        button_del.addEventListener('click', function () {
+            console.log('del');
+            var allRows = document.getElementById('room_tbl').rows;
+            if (allRows.length > 1) {
+                allRows[allRows.length - 1].remove();
+                i_cell = i_cell - 1;
+            }
+
+        });
+        function DeleteRow(i) {
+            //console.log(i);
+            let str = "somerow" + i;
+            var row = document.getElementById(str);
+            //console.log(row);
+            row.parentNode.removeChild(row);
+            //i_cell = i_cell - 1;
+
+            //for (var i = 0; i < i_cell; i++) {
+            //    //var data_now = date_time();
+            //    btn[i].onclick = function () {
+            //        cell += '<tr id="somerow' + i + '">               <td><input type="text" id="textbox' + i + '"name="Name"></td><td><input type="text" id="textbox' + i + '"name="Name"></td> <td id="data_now">' + data_now + '</td>   <td><select id = "id_stat' + i + '">   <option value="14">14</option> <option value="19">19</option>  </select> </td><td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i + '"value="-"/>        </td>  </tr>';
+
+            //        document.getElementById('room_tbl').innerHTML = cell;
+            //    };
+            //}
+
+
+        }
+
+
+        var documents_mas = [];
+        //var button_prov = document.querySelector('.button_prov');
+        //button_prov.addEventListener('click', function () {
+        //    let trs = document.querySelectorAll('tr');
+        //    documents_mas = [];
+
+        //    for (i = 0; i < i_cell; i = i + 1) {
+        //        var startX = (document.getElementById('textbox1' + i).value);
+        //        var startY = (document.getElementById('textbox2' + i).value);
+        //        let td = trs[i + 1].querySelectorAll('td')[2];
+        //        var start1 = td.innerHTML;
+        //        let article = document.getElementById("id_stat" + i).value;
+        //        if (startX != '' && startY != '') {
+        //            d = { "commentary": startX, "document": startY, "date": start1, "stat": article };
+        //            documents_mas.push(d);
+        //        }
+        //    }
+        //    console.log(documents_mas);
+        //});
+
+        var button_add = document.querySelector('.button_add');
+        button_add.addEventListener('click', function () {
+            var data_now = date_time();
+            cell = '<tr id="somerow' + i_cell + '">  <td><input type="text" id="textbox1' + i_cell + '"name="Name"></td><td><input type="text" id="textbox2' + i_cell + '"name="Name"></td> <td id="datnow' + i_cell + '" value="' + data_now + '">' + data_now + '</td>  <td><select id = "id_stat' + i_cell + '">   <option value="14">14</option> <option value="19">19</option>  </select> </td><td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i_cell + '"value="-"/>        </td></tr>';
+
+            i_cell = i_cell + 1;
+            const template = document.createElement("template");
+            template.innerHTML = cell;
+            const node = template.content.firstElementChild;
+
+            var foo = document.getElementById("room_tbl");
+            var bar = document.getElementById("room_tbl");
+            var rows = foo.rows;
+            var lastRow = rows[rows.length - 1];
+            var newRow = cloneRow(node, true, bar);
+
+            function cloneRow(row, append, parent) {
+                var newRow = row.cloneNode(true);
+                if (append) {
+                    if (parent) {
+                        parent.appendChild(newRow);
+                    }
+                }
+                return newRow;
+            }
+
+        });
+
+
+
+        //var btn = document.getElementsByClassName('button1');
+        //for (var i = 0; i < btn.length; i++) {
+        //    var data_now = date_time();
+        //    btn[i].onclick = function () {
+        //        cell += '<tr id="somerow' + i + '">               <td><input type="text" id="textbox' + i + '"name="Name"></td><td><input type="text" id="textbox' + i + '"name="Name"></td> <td id="datnow' + i + '" value="' + data_now + '">' + data_now + '</td>   <td><select id = "id_stat' + i + '">   <option value="14">14</option> <option value="19">19</option>  </select> </td><td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i + '"value="-"/>        </td>  </tr>';
+
+        //        document.getElementById('room_tbl').innerHTML = cell;
+        //    };
+        //}
+
+
+        function zero_first_format(value) {
+            if (value < 10) {
+                value = '0' + value;
+            }
+            return value;
+        }
+
+
+        function date_time() {
+            var current_datetime = new Date();
+            var day = zero_first_format(current_datetime.getDate());
+            var month = zero_first_format(current_datetime.getMonth() + 1);
+            var year = current_datetime.getFullYear();
+            var hours = zero_first_format(current_datetime.getHours());
+            var minutes = zero_first_format(current_datetime.getMinutes());
+            var seconds = zero_first_format(current_datetime.getSeconds());
+
+            return day + "." + month + "." + year;
+        }
+
+
+        var button_save = document.querySelector('.button_save');
+        button_save.addEventListener('click', function () {
+            console.log("Save");
+            let trs = document.querySelectorAll('tr');
+            documents_mas = [];
+            //console.log(i_cell);
+            //for (i = 0; i < i_cell; i = i + 1) {
+            //    //console.log(document.getElementById('textbox1' + i).value);
+            //    var startX = (document.getElementById('textbox1' + i).value);
+            //    var startY = (document.getElementById('textbox2' + i).value);
+            //    let td = trs[i + 1].querySelectorAll('td')[2];
+            //    var start1 = td.innerHTML;
+
+            //    let article = document.getElementById('id_stat' + i).value;
+            //    if (startX != '' && startY != '') {
+            //        d = { "commentary": startX, "document": startY, "date": start1, "stat": article };
+            //        documents_mas.push(d);
+            //    }
+            //}
+            let i = 0;
+            //console.log(document.getElementById('textbox1' + i));
+
+            while (i < i_cell) {
+                console.log(i, i_cell);
+                if ( null == document.getElementById('textbox1' + i)) {
+                    i += 1;
+                }
+                else {
+                    var startX = (document.getElementById('textbox1' + i).value);
+                    var startY = (document.getElementById('textbox2' + i).value);
+                    //let td = trs[i + 1].querySelectorAll('td')[2];
+
+                    //var start1 = td.innerHTML;
+                    var start1 = String(document.getElementById('datnow' + i).innerHTML);
+                    //console.log(document.getElementById('datnow' + i), start1);
+
+
+                    let article = document.getElementById('id_stat' + i).value;
+                    if (startX != '' && startY != '') {
+                        d = { "commentary": startX, "document": startY, "date": start1, "stat": article };
+                        documents_mas.push(d);
+                    }
+                    i += 1;
+                }
+               
+
+            }
+
+
+
+            console.log(documents_mas);
+            descr = { "documents": documents_mas }
+            json_descr = JSON.stringify(descr);
+            var floor_num = -1000;
+            var build_id = document.getElementById("select_get_building_id");
+            num = build_id.options[build_id.selectedIndex].value;
+            build_id = num;
+            //console.log(document.getElementById("id_stat").value);
+            saveBuildingObject(build_id, floor_num, 'building_descr', json_descr);
+
+        });
+
+        
+        create_select("outputSelect");
+
+        function callBackFunc(data) {
+            console.log('callBackFunc' + JSON.stringify(data));
+            Show_res(JSON.stringify(data));
+        }
+
+        function callBackDescr(data) {
+            console.log('callBackDescr' + JSON.stringify(data));
+            if (String(JSON.stringify(data)) != "{}") {
+                Show_table(JSON.stringify(data));
+            }
+            else {
+                alert("У данного этажа нет комнаты!");
+            }
+           
+        }
+        function button_load() {
+            var build_id = document.getElementById("select_get_building_id");
+            num = build_id.options[build_id.selectedIndex].value;
+            console.log("build_id= ", num);
+
+            //flor_num = document.getElementById("selectFloorId");
+            //text = flor_num.options[flor_num.selectedIndex].text;
+            //console.log("flor_num= ", text);
+            /*floor_num = text;*/
+            build_id = num;
+
+            loadBuildingObject(build_id, -1000, 'building_descr', callBackDescr)
+        }
+
+        function Show_table(mas_descr) {
+            cell = '';
+            cell += '<tr><th>Коментарий</th><th>Документ (HTTP ссылка)</th><th>Дата изменения</th><th>Статья </th><th>Удалить</th></tr>';
+            console.log(mas_descr.length);
+            i_cell = 0;
+            var mas_descr1 = JSON.parse(mas_descr);
+            var mas_descr2 = mas_descr1["documents"];
+            console.log(mas_descr2.length);
+            console.log(mas_descr2[0].commentary);//пример как получать значение из объекта массива
+            for (i = 0; i < mas_descr2.length; i = i + 1) {
+                cell += '<tr id="somerow' + i_cell + '">    <td><input type="text" value=' + mas_descr2[i].commentary + ' id="textbox1' + i + '"name="Name"></td>   <td><input type="text" value=' + mas_descr2[i].document + ' id="textbox2' + i + '"name="Name"></td> <td id="datnow' + i + '" value="' + mas_descr2[i].date+'">' + mas_descr2[i].date + '</td> <td>   <select id = "id_stat' + i + '">   <option value="' + mas_descr2[i].stat + '">' + mas_descr2[i].stat + '</option>  </select>       </td><td>     <input class="button_del_row" title="Удалить текущую строку" type="button" onclick="DeleteRow(' + i_cell + ');" id="button_' + i_cell + '"value="-"/>        </td> </tr>';
+                i_cell += 1;
+                document.getElementById('room_tbl').innerHTML = cell;
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

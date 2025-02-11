@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <title>LIT</title>
+    <link rel="stylesheet" href="css/kap_style.css">
+    <!--  <link rel="stylesheet" href="css/style.css">-->
+    <link rel="stylesheet" href="css/leaflet.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.4.0.js"></script>
+    <script src="js/js.js"></script> 
+    <script src="js/js.cookie.js"></script> 
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/leaflet/Leaflet.Editable.js"></script>
+    <script src="js/leaflet/Leaflet.ImageOverlay.Rotated.js"></script>
+    <script src="js/server.js"></script>
+    <style>
+        .leaflet-container {
+            height: 839px;
+            width: 1438px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .leaflet-tooltip-top:before,
+        .leaflet-tooltip-bottom:before,
+        .leaflet-tooltip-left:before,
+        .leaflet-tooltip-right:before {
+        }
+
+        .lhep_obj_tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: transparent;
+            text-shadow: 1px 1px 2px black, 0 0 1em red;
+            /* Параметры тени */
+            color: white;
+            /* Белый цвет текста */
+            font-size: 1em;
+            /* Размер надписи */
+            border: none
+        }
+
+        .leaflet-tooltip-left.myCSSClass::before {
+            border-left-color: cyan;
+        }
+
+        .leaflet-tooltip-right.myCSSClass::before {
+            border-right-color: cyan;
+        }
+    </style>
+</head>
+
+<body class="kap_page">
+    <div class="kap_flex-row">
+        <!--Шапка с меню-->
+        <div class="kap_project kap_project_beginner kap_project_beginner_menu">
+            <div class="kap_button_">
+                <fieldset>
+                    <input type="radio" id="room" name="rooms_floors" value="first" onClick="window.open('index2.html', '_self', false);" ;>
+                    <label for="room">Комнаты</label><br>
+                    <input type="radio" id="floor" name="rooms_floors" value="second" checked>
+                    <label for="floor">Этажи</label><br>
+                    <input type="radio" id="marker" name="rooms_floors" value="third" onClick="window.open('index_mark2.html', '_self', false);" ;>
+                    <label for="floor">Маркеры</label><br>
+                </fieldset>
+            </div>
+
+            <div class="kap_building">
+                <label for="selectBuildId">Здание:</label>
+                <div id="outputSelect"></div>
+                <!-- <select id="selectFloorId" title="Выберите здание"></select>
+                <div id="outputSelect"></div> -->
+            </div>
+
+            <div class="kap_floor">
+                <label for="selectFloorId">Этаж: </label>
+                <select id="selectFloorId" title="Выберите этаж" onchange="floorChange()">
+                    <option value=”none” selected>Выберите</option>
+                    <option value=”id_floor_-1”>-1</option>
+                    <option value=”id_floor_0”>0</option>
+                    <option value=”id_floor_1”>1</option>
+                    <option value=”id_floor_2”>2</option>
+                    <option value=”id_floor_3”>3</option>
+                    <option value=”id_floor_4”>4</option>
+                    <option value=”id_floor_5”>5</option>
+                    <option value=”id_floor_6”>6</option>
+                    <option value=”id_floor_7”>7</option>
+                    <option value=”id_floor_8”>8</option>
+                    <option value=”id_floor_9”>9</option>
+                    <option value=”id_floor_10”>10</option>
+                    <option value=”id_floor_11”>11</option>
+                    <option value=”id_floor_12”>12</option>
+                    <option value=”id_floor_13”>13</option>
+                    <option value=”id_floor_14”>14</option>
+                    <option value=”id_floor_15”>15</option>
+                    <option value=”id_floor_16”>16</option>
+                    <option value=”id_floor_17”>17</option>
+                    <option value=”id_floor_18”>18</option>
+                    <option value=”id_floor_19”>19</option>
+                    <option value=”id_floor_20”>20</option>
+
+                </select>
+            </div>
+            <div class="kap_create_room">
+                <input type="checkbox" id="add_grid" name="add_grid" value="add_grid" onchange="Change_grid();">
+                <label for="create_room">Добавить линейку</label>
+            </div>
+            <div class="kap_button">
+                <input class="kap_button_style" type="button" id="asd" onclick="Length_grid();" value="Рассичтать длину линейки">
+                <input class="kap_button_style" type="button" id="asd" onclick="Del_grid();" value="Удалить линейки">
+
+            </div>
+            <div class="kap_button">
+                <input class="kap_button_style" type="button" id="asd" onclick="Create();" value="Создать">
+                <input class="kap_button_style" type="button" id="edite" value='Редактировать' onClick="knopothka(this)">
+
+                <input class="kap_button_style" title="Сохранить контур" type="button" onclick="save_contour()" value="Сохранить контур" />
+                <!--<input class="kap_button_style" title="Загрузить контур" type="button" onclick="load_contour()" value="Загрузить контур" />-->
+
+                <input class="kap_button_style" title="Сохранить изображние" type="button" onclick="file_upload()" value="Сохранить изображние" />
+                <!-- <input class="kap_button_style" title="Загрузить изображние" type="button" onclick="get_image()" value="Загрузить изображние" />-->
+                <input class="kap_button_style" title="Удалить все контуры" type="button" onclick="Delete_pol()" value="Удалить все контуры" />
+
+                <!-- <input class="kap_button_style" title="Удалить картинку" type="button" onclick="Delete_image()" value="Удалить" />-->
+                <!--<input class="kap_button_style kap_button_style_file"  type="file" name="myImage" id="fileName" onchange="load_image(this)" accept=".png, .pdf, .tiff, .jpg" />-->
+                <input type="file" name="myImage" id="fileName" onchange="load_image(this)" accept=".png, .pdf, .tiff, .jpg" />
+                <!-- <button class="kap_button_style" id="clear">Отмена выбранной фотографии</button>-->
+                <input class="kap_button_style" type="button" value="Открыть таблицу в новом окне" onClick="window.open('index1.html');" />
+                <!--  <span class="icon">Открыть таблицу в новом окне</span>-->
+
+            </div>
+
+        </div>
+        <!--Структура ЛИТ-->
+        <section class="kap_project kap_project_beginner kap_project_beginner_map">
+            <div id="litmap">
+                <!--Этажи-->
+                <div class="block1">
+                    <!--Структура Института-->
+                    <div class="layout-column4">
+                    </div>
+                    <div class="layout-column5">
+                        <div class="feature hidden">
+                        </div>
+                    </div>
+                    <div class="layout-column5">
+                        <div class="feature hidden">
+                        </div>
+                    </div>
+                </div>
+                <!--Расположение схемы здания-->
+                <div class="kap_block2">
+                    <div id=litmap class="kap_layout-column3">
+                        <div class="kap_feature hidden"> </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <div class="kap_table kap_table_vis">
+            <table class="kap_tab_style" id="room_tbl">
+                <tbody id="bar">
+                </tbody>
+            </table>
+            <button class="button_add">Добавить</button>
+            <button class="button_prov">Проверка данных</button>
+            <button class="button_save">Cохранить</button>
+            <button class="button_del">Удалить</button>
+
+
+        </div>
+
+
+
+
+    </div>
+    <div class="tabl">
+        <button class="button_close">Закрыть</button>
+        <button class="button_open" style="display:none">Открыть</button>
+        <div class="tablica" id=sort_div_table>
+
+        </div>
+    </div>
+        <script>
+            var button_close = document.querySelector('.button_close');
+            var button_open = document.querySelector('.button_open');
+            var tablica = document.querySelector('.tablica');
+            button_close.addEventListener('click', function () {
+                button_open.style.display = "block";
+                button_close.style.display = "none";
+                tablica.style.display = "none";
+            });
+            button_open.addEventListener('click', function () {
+                button_close.style.display = "block";
+                button_open.style.display = "none";
+                tablica.style.display = "block";
+            });
+
+            var number_line = 1;
+            var cells;
+            otr_table_coord(0);
+            function otr_table_coord(aaa) {
+                cells = '<table id=sotr_tbl> <thead><tr>';
+                cells += '<th style="width: 20px;">' + '№' + '</th> \
+                        <th style="width: 150px;"> Имя линейки </th> \
+                        <th style="width: 200px;"> Общая длина </th> \
+                        <th style="width: 350px;"> Длины ребер </th></tr>';
+                cells += ' </thead></table>';
+                number_line = 1;
+                if (aaa != 0) {
+                    cells += '<table id=sotr_tbl><tbody><tr>';
+                    for (let j = 0; j < aaa.length; j++) {
+                        cells += '<table id=sotr_tbl><tbody><tr>';
+                        let arr = [number_line, aaa[j].name, aaa[j].all_len, aaa[j].lens];
+                        number_line = number_line + 1;
+                        cells += '<tr>';
+                        cells += '<td style="width:20px">';
+                        let cellText = arr[0];
+                        cells += cellText + '</td>';
+
+                        cells += '<td style="width:150px">';
+                        cellText = arr[1];
+                        cells += cellText + '</td>';
+
+                        cells += '<td style="width:200px">';
+                        cellText = arr[2];
+                        cells += cellText + '</td>';
+
+                        cells += '<td style="width:350px">';
+                        cellText = arr[3];
+                        cells += cellText + '</td>';
+
+                        cells += '</tr>';
+                    }
+                    cells += '</tbody></table>';
+                    document.getElementById('sort_div_table').innerHTML = cells;
+                }
+                else {
+                    document.getElementById('sort_div_table').innerHTML = cells;
+                }
+            };
+
+            let control = document.querySelector("#fileName"),
+                clearBn = document.querySelector("#clear");
+            function otmena() {
+                control.value = '';
+                let newControl = control.cloneNode(true)
+                control.replaceWith(newControl);
+                control = newControl;
+                console.log("Otmena");
+            }
+
+
+
+
+
+            function buildingChange() {
+                console.log("buildingChange");
+                let formObj = document.getElementById('selectFloorId');
+                formObj[0].selected = true;
+                let val_sel = formObj[0].text;
+                Cookies.set("floorID", val_sel);
+
+            }
+            function floorChange() {
+                console.log("floorChange");
+                Delete_pol();
+                get_image();
+                load_contour();
+                otmena();
+
+            }
+
+
+
+            create_select("outputSelect");
+            setTimeout(timeout, 1100);
+            var elSelect = "floorID";
+            if (Cookies.get(elSelect) === undefined) {
+
+            } else {
+                console.log("floorID", Cookies.get(elSelect));
+                var formObj = document.getElementById('selectFloorId');
+                for (let j = 0; j < formObj.length; j++) {
+                    if (formObj[j].text == Cookies.get(elSelect)) {
+                        formObj[j].selected = true;
+                    }
+                }
+
+            }
+            function timeout() {
+                var elSelectout = "outSel";
+                if (Cookies.get(elSelectout) === undefined) {
+
+                } else {
+                    var selBildID = document.getElementById('select_get_building_id');
+                    for (let j = 0; j < selBildID.length; j++) {
+                        if (selBildID[j].value == Cookies.get(elSelectout)) {
+                            console.log("select_get_building_id", selBildID[j].value, Cookies.get(elSelectout));
+                            selBildID[j].selected = true;
+                        }
+                    }
+                }
+            }
+            $('#selectFloorId').change(function () {
+
+                $(this).find(":selected").each(function () {
+
+                    let fid = $(this).text();
+                    Cookies.set("floorID", fid);
+                    console.log("floorID", fid, Cookies.get("floorID"));
+                });
+            });
+
+            $('#outputSelect').change(function () {
+                $(this).find(":selected").each(function () {
+                    let osel = $(this).val();
+
+                    Cookies.set("outSel", osel);
+                    console.log("outSel", osel, Cookies.get("outSel"));
+                });
+            });
+
+
+
+
+
+
+
+
+
+            var image;
+            var file;
+            var image1;
+            function load_image(input) {
+
+                var file = input.files[0];
+                image = document.createElement('img');
+                image.src = window.URL.createObjectURL(file);
+                image = L.imageOverlay(image, bounds).addTo(lit_map);
+
+            }
+
+            var cell = '';
+            var i_cell = 0;
+            DrawCell();
+            var flagi = 0;
+            function DrawCell() {
+                console.log('ok');
+
+                var tbl = document.getElementById('room_tbl');
+                var data_now = date_time();
+                //cell += '<th style="width: 200px;">Coordinates</th>';
+                cell += '<tr><th>Удаление</th><th>Коментарий</th><th>Документ (HTTP ссылка)</th><th>Дата изменения</th><th>Редактирование</th></tr>';
+                cell += '<tr id="somerow"><td>  </td><td><input type="text" id="textbox1' + i_cell + '"name="Name"></td><td><input type="text" id="textbox2' + i_cell + '"name="Name"></td> <td id="datnow">' + data_now + '</td><td> </td></tr>';
+                i_cell = 1;
+                var k = 2;
+                for (var i = 0; i < 1; i++) {
+                    //const row = document.createElement("tr");
+                    //k = i + 1;
+                    //<button class="button1">Добавить</button>
+                    //cell += '<tr><td></td><td>Договор с ООО жулик на ремонт</td><td>данныеHTTPS://sed.jinr.ru/asdasdtd><td>данные</td><td> </td></tr>';
+                    //cell += '<tr style ="width: 20px;"><td><input type="text" id="textbox' + i + '"name="Name"></td></tr>';
+                }
+
+                document.getElementById('room_tbl').innerHTML = cell;
+                console.log('ok');
+
+            }
+            //document.querySelector('.button2').onclick = function () {
+            //    alert("Вы нажали на кнопку");
+            //}
+            var button_del = document.querySelector('.button_del');
+            button_del.addEventListener('click', function () {
+                console.log('del');
+                //$('#room_tbl tr').find('.last-child').remove();
+                var allRows = document.getElementById('room_tbl').rows;
+                if (allRows.length > 1) {
+                    allRows[allRows.length - 1].remove();
+                    i_cell = i_cell - 1;
+                }
+
+
+
+            });
+            var documents_mas = [];
+            var button_prov = document.querySelector('.button_prov');
+            button_prov.addEventListener('click', function () {
+                let trs = document.querySelectorAll('tr');
+                documents_mas = [];
+
+                for (i = 0; i < i_cell; i = i + 1) {
+                    var startX = (document.getElementById('textbox1' + i).value);
+                    var startY = (document.getElementById('textbox2' + i).value);
+                    let td = trs[i + 1].querySelectorAll('td')[3];
+                    var start1 = td.innerHTML;
+                    if (startX != '' && startY != '') {
+                        d = { "commentary": startX, "document": startY, "date": start1 };
+                        documents_mas.push(d);
+                    }
+
+
+                }
+                console.log(documents_mas);
+                //console.log("Del", cell.length);
+                //for (var i = 0; i < cell.length; i++) {
+                //    //const row = document.createElement("tr");
+                //    //k = i + 1;
+                //    //<button class="button1">Добавить</button>
+                //    //cell = '<tr><td></td><td>Договор с ООО жулик на ремонт</td><td>данныеHTTPS://sed.jinr.ru/asdasdtd><td>данные</td><td> </td></tr>';
+                //    //cell += '<tr style ="width: 20px;"><td><input type="text" id="textbox' + i + '"name="Name"></td></tr>';
+                //}
+                //document.getElementById('room_tbl').innerHTML = cell;
+            });
+            var button_add = document.querySelector('.button_add');
+
+
+            button_add.addEventListener('click', function () {
+                var data_now = date_time();
+                cell = '<tr><td>  </td><td><input type="text" id="textbox1' + i_cell + '"name="Name"></td><td><input type="text" id="textbox2' + i_cell + '"name="Name"></td> <td>' + data_now + '</td><td> </td></tr>';
+
+                //document.getElementById('room_tbl').innerHTML = cell;
+                i_cell = i_cell + 1;
+                const template = document.createElement("template");
+                template.innerHTML = cell;
+                const node = template.content.firstElementChild;
+
+                var foo = document.getElementById("room_tbl");
+                var bar = document.getElementById("room_tbl");
+                var rows = foo.rows;
+                var lastRow = rows[rows.length - 1];
+                var newRow = cloneRow(node, true, bar);
+
+                function cloneRow(row, append, parent) {
+                    var newRow = row.cloneNode(true);
+                    if (append) {
+                        if (parent) {
+                            parent.appendChild(newRow);
+                        }
+                    }
+                    return newRow;
+                }
+
+            });
+
+
+
+            var btn = document.getElementsByClassName('button1');
+
+            // while (true) {
+
+            //var btn = document.querySelector('button1');
+            for (var i = 0; i < btn.length; i++) {
+                // console.log('holla');
+                var data_now = date_time();
+                btn[i].onclick = function () {
+                    //  alert(this.id)
+                    cell += '<tr><td> </td><td><input type="text" id="textbox' + i + '"name="Name"></td><td><input type="text" id="textbox' + i + '"name="Name"></td> <td id="data_now">' + data_now + '</td><td> <button class="button2">Cохранить или Редактировать</button> </td></tr>';
+
+                    document.getElementById('room_tbl').innerHTML = cell;
+                };
+            }
+
+
+
+
+            var button_save = document.querySelector('.button_save');
+            button_save.addEventListener('click', function () {
+                console.log("Save");
+                let trs = document.querySelectorAll('tr');
+                documents_mas = [];
+
+                for (i = 0; i < i_cell; i = i + 1) {
+                    var startX = (document.getElementById('textbox1' + i).value);
+                    var startY = (document.getElementById('textbox2' + i).value);
+                    let td = trs[i + 1].querySelectorAll('td')[3];
+                    var start1 = td.innerHTML;
+                    if (startX != '' && startY != '') {
+                        d = { "commentary": startX, "document": startY, "date": start1 };
+                        documents_mas.push(d);
+                    }
+                }
+                console.log(documents_mas);
+                json_descr = JSON.stringify(documents_mas);
+                var floor_num = -1000
+                var build_id = document.getElementById("select_get_building_id");
+                num = build_id.options[build_id.selectedIndex].value;
+                build_id = num;
+                saveBuildingObject(build_id, floor_num, 'building_descr', json_descr);
+
+            });
+
+            function zero_first_format(value) {
+                if (value < 10) {
+                    value = '0' + value;
+                }
+                return value;
+            }
+            function date_time() {
+                var current_datetime = new Date();
+                var day = zero_first_format(current_datetime.getDate());
+                var month = zero_first_format(current_datetime.getMonth() + 1);
+                var year = current_datetime.getFullYear();
+                var hours = zero_first_format(current_datetime.getHours());
+                var minutes = zero_first_format(current_datetime.getMinutes());
+                var seconds = zero_first_format(current_datetime.getSeconds());
+
+                return day + "." + month + "." + year;
+            }
+
+
+
+
+
+
+
+
+            var meg_flag = 0;
+            document.getElementById('edite').disabled = true;
+            function knopothka(elem) {
+                if (elem.value == "Редактировать") {
+                    elem.value = "Завершить редактирование";
+                    meg_flag = 1;
+                    Edit();
+
+                }
+
+                else {
+                    meg_flag = 0;
+                    elem.value = "Редактировать";
+                    Edit2();
+                }
+            }
+            var roomsGrp = L.layerGroup();
+            var lit_map = L.map('litmap', {
+                editable: true,
+                crs: L.CRS.Simple
+            });
+            lit_map.setZoom(0);
+            lit_map.panTo([250, 250]);
+            //        var lit_ctrl = L.control.scale({
+            //position: 'topleft',
+            //metric: true
+            //}).addTo(lit_map);
+            var mymap = lit_map;
+            //============================================================================
+            L.EditControl = L.Control.extend({
+                options: {
+                    position: 'topleft',
+                    callback: null,
+                    kind: '',
+                    html: ''
+                },
+
+                onAdd: function (map) {
+                    var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+                        link = L.DomUtil.create('a', '', container);
+
+                    link.href = '#';
+                    link.title = 'Create a new ' + this.options.kind;
+                    link.innerHTML = this.options.html;
+                    L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                        .on(link, 'click', function () {
+                            window.LAYER = this.options.callback.call(map.editTools);
+                        }, this);
+
+                    return container;
+                }
+
+            });
+            console.log('leaf 2 1');
+
+            L.NewLineControl = L.EditControl.extend({
+
+                options: {
+                    position: 'topleft',
+                    callback: mymap.editTools.startPolyline,
+                    kind: 'line',
+                    html: '\\/\\'
+                }
+
+            });
+
+            console.log('leaf 2 2');
+            L.NewPolygonControl = L.EditControl.extend({
+
+                options: {
+                    position: 'topleft',
+                    callback: mymap.editTools.startPolygon,
+                    kind: 'polygon',
+                    html: '▰'
+                }
+
+            });
+
+            L.NewMarkerControl = L.EditControl.extend({
+
+                options: {
+                    position: 'topleft',
+                    callback: mymap.editTools.startMarker,
+                    kind: 'marker',
+                    html: '🖈'
+                }
+
+            });
+
+            L.NewRectangleControl = L.EditControl.extend({
+
+                options: {
+                    position: 'topleft',
+                    callback: mymap.editTools.startRectangle,
+                    kind: 'rectangle',
+                    html: '⬛️'
+                }
+
+            });
+
+            L.NewCircleControl = L.EditControl.extend({
+
+                options: {
+                    position: 'topleft',
+                    callback: mymap.editTools.startCircle,
+                    kind: 'circle',
+                    html: '⬤'
+                }
+
+            });
+            //=============================================================
+            lit_map.on('click', onMapClick);
+            function onMapClick(e) {
+                navigator.clipboard.writeText(e.latlng.lat + ',' + e.latlng.lng);
+                $('#coord').html('Coord=[' + e.latlng.lat + ',' + e.latlng.lng + ']');
+            }
+
+            //        roomsGrp.addTo(lit_map);
+            // 'img/cont.png'
+
+            var bounds = [[0, 0], [2576 / 4, 2820 / 4]];
+
+
+            //        var image = L.imageOverlay('images/cont.png', bounds).addTo(lit_map);
+            //        lit_map.fitBounds(bounds);
+            lit_map.setZoom(0);
+
+            var lit_ctrl = L.control.scale({ position: 'topleft', metric: true }).addTo(lit_map);
+
+            //        var circle1 = L.circle([0,0], {fillOpacity:0.51,color:'#00FF00',radius: 100}).addTo(lit_map);
+            //ОИЯИ 32_13 1 этаж П
+            //var image = L.imageOverlay('images/photo_2023-03-04_20-38-57 (4).jpg', bounds).addTo(lit_map);
+            // var image = L.imageOverlay('images/ОИЯИ 32_13 1 этаж П.pdf', bounds).addTo(lit_map);
+            //       var polygon1 = L.polygon([
+            //           [bounds[0][0],bounds[0][1]],
+            //           [bounds[1][0],bounds[0][1]],
+            //           [bounds[1][0],bounds[1][1]],
+            //           [bounds[0][0],bounds[1][1]]
+            //   ]
+            //        , {fillOpacity:0.51,color:'#FF0000', weight:2}).addTo(lit_map);
+            //polygon1.enableEdit();
+            //polygon1.disableEdit();
+
+            //var polyline1 = L.polyline([[10,20],[200,300], [10,30] ] , {fillOpacity:0.51,color:'#FF0000', weight:3}).addTo(lit_map);
+            //polyline1.enableEdit();
+
+
+            //console.log(' line '+polygon1.getLatLngs());
+            //console.log(' poly '+polyline1.getLatLngs());
+
+
+
+
+
+
+
+
+
+            //const btn = document.getElementById('btn');
+            //btn.addEventListener('click', () => {
+            //    btn.textContent = 'Завершить редактирование';
+            //});
+
+
+
+            var flor_num;
+            var text;
+            var num;
+            var build_id;
+
+            //console.log(flor_num.text);
+
+            function val() {
+                d = document.getElementById("select_get_building_id").value;
+                alert("Номер здания = " + d);
+            }
+            var json_poly = [];
+            function save_contour() {
+                //var json_data = JSON.stringify(polygon1.toGeoJSON().geometry.coordinates[0]);
+                //console.log("final_data= " + json_data);
+                if (meg_flag == 1) {
+                    alert("Перед сохранением завершите редактирование!");
+
+                }
+                else {
+                    for (let i of polygoni) {
+                        //i.disableEdit();
+                        var bb = i.getLatLngs();
+                        if (bb.length == 1) { a = bb[0] } else { a = bb };
+                        var new_l = [];
+                        console.log('a=' + (typeof a) + ' ' + a);
+                        for (j in a) {
+                            console.log('I=' + (typeof j) + ' ' + j + ' A=' + (typeof a[j]) + ' ' + a[j]);
+                            var b = a[j];
+                            var t = a[j];
+                            var t1 = t['lat'];
+                            var t2 = t['lng'];
+                            new_l.push([t1, t2]);
+
+                        }
+                        var coord = JSON.stringify(new_l);
+                        console.log(coord);
+
+                        //s = JSON.stringify(i.toGeoJSON().geometry.coordinates[0]);
+                        //s.shift();
+                        json_poly.push(coord);
+                    }
+                    console.log("json_poly= " + json_poly);
+                    var json_poly_1 = {};
+                    json_poly_1["coordinates"] = json_poly;
+                    console.log("json_poly_1= ", json_poly_1);
+                    var json_data = json_poly_1;
+                    console.log("final_data= ", json_data["coordinates"]);
+
+                    flor_num = document.getElementById("selectFloorId");
+                    // var value = flor_num.value;
+                    text = flor_num.options[flor_num.selectedIndex].text;
+                    console.log("flor_num= ", text);
+
+                    build_id = document.getElementById("select_get_building_id");
+                    //console.log("build_id= ", build_id.options[build_id.selectedIndex].text);
+                    num = build_id.options[build_id.selectedIndex].value;
+                    console.log("build_id= ", num);
+
+                    build_id = num;
+                    floor_num = text;
+                    console.log(JSON.stringify(json_data));
+
+                    saveBuildingObject(build_id, floor_num, 'contour', JSON.stringify(json_data));
+                }
+
+            }
+
+            function load_contour() {
+                if (meg_flag == 1) {
+                    alert("Перед загрузкой выйдите из режима редактирования!");
+
+                }
+                else {
+                    var build_id = document.getElementById("select_get_building_id");
+                    num = build_id.options[build_id.selectedIndex].value;
+                    console.log("build_id= ", num);
+
+                    flor_num = document.getElementById("selectFloorId");
+                    text = flor_num.options[flor_num.selectedIndex].text;
+                    console.log("flor_num= ", text);
+                    floor_num = text;
+                    build_id = num;
+
+                    loadBuildingObject(build_id, floor_num, 'contour', callBackFunc)
+                }
+
+            }
+
+            function callBackFunc(data) {
+                console.log('callBackFunc' + JSON.stringify(data));
+                if (String(JSON.stringify(data)) != "{}") {
+                    coords_json = JSON.parse(JSON.stringify(data));
+                    console.log(coords_json);
+                    console.log(coords_json.length);
+                    coords = coords_json.coordinates;
+                    // console.log(type(coords), coords);
+                    console.log(coords);
+                    console.log(coords.length);
+                    for (let i = 0; i < coords.length; i++) {
+                        console.log('coords ' + i + ' ' + coords[i])
+                        Show_res(JSON.stringify(coords[i]), i);
+                    }
+                    //for (let i = 0; i < coords_json.length; i++) {
+                    //    console.log('coords ' + i + ' ' + coords_json[i]);
+                    //    Show_res(JSON.stringify(coords_json[i]), i);
+                    //}
+                }
+                else {
+                    alert('У выбранного этажа еще нет контура.');
+                }
+
+            }
+
+            function callBackDescr(data) {
+                console.log('callBackDescr' + JSON.stringify(data));
+            }
+
+
+            polyline_grid = [];
+            function Del_grid() {
+                document.getElementById('add_grid').checked = false;
+                for (var i = 0; i < polyline_grid.length; i++) {
+                    polyline_grid[i].remove();
+                }
+                polyline_grid = [];
+                col = 0;
+                otr_table_coord(0);
+                //data_array = [];
+            }
+           var  aaa = [];
+            function Length_grid() {
+                aaa = [];
+                for (var i = 0; i < polyline_grid.length; i++) {
+                    let alllinelen = 0;
+                    let linlens = [];
+                    for (var j = 0; j < polyline_grid[i]._parts[0].length - 1; j++) {
+                        let x1 = polyline_grid[i]._parts[0][j].x;
+                        let y1 = polyline_grid[i]._parts[0][j].y;
+                        let x2 = polyline_grid[i]._parts[0][j + 1].x;
+                        let y2 = polyline_grid[i]._parts[0][j + 1].y;
+                        let dx = x2 - x1;
+                        let dy = y2 - y1;
+
+                        dx = dx * dx;
+                        dy = dy * dy;
+                        linlens.push(Math.sqrt(dx + dy));
+                        alllinelen = alllinelen + Math.sqrt(dx + dy);
+                    }
+                    let obs = { name: String(name_color[i]), all_len: String(alllinelen), lens: String(linlens) };
+                    //aaa = [];
+                    aaa.push(obs);
+                   
+                    console.log("Длины отрезков линии", name_color[i], "=", linlens);
+                    console.log('Общая длина линии', name_color[i], i + 1, "=", alllinelen);
+                    
+
+                }
+                //console.log('aaa', aaa);
+                otr_table_coord(aaa);
+            }
+            //color = ['#ADFF2F', '#CD5C5C', '#8B0000', '#006400', 'Navy', 'SlateBlue', 'OrangeRed', 'Orange', 'Purple', 'SaddleBrown', 'Black', 'Fuchsia', 'Aqua', 'DarkSlateGrey', 'Yellow', 'RosyBrown', 'SandyBrown', 'NavajoWhite', 'Salmon', 'Goldenrod'];
+            //name_color = ['GreenYellow', 'IndianRed', 'DarkRed', 'DarkGreen', '#000080', '#6A5ACD', '#FF4500', '#FFA500', '#800080', '#8B4513', '#000000', '#FF00FF', '#00FFFF', '#2F4F4F', '#FFFF00', '#BC8F8F', '#F4A460', '#FFDEAD', '#FA8072', '#DAA520'];
+            color = ['#ADFF2F', '#CD5C5C', '#8B0000', '#006400', '#000080', '#6A5ACD', '#FF4500', '#FFA500', '#800080', '#8B4513', '#000000', '#FF00FF', '#00FFFF', '#2F4F4F', '#FFFF00', '#BC8F8F', '#F4A460', '#FFDEAD', '#FA8072', '#DAA520'];
+            name_color = ['GreenYellow', 'IndianRed', 'DarkRed', 'DarkGreen', 'Navy', 'SlateBlue', 'OrangeRed', 'Orange', 'Purple', 'SaddleBrown', 'Black', 'Fuchsia', 'Aqua', 'DarkSlateGrey', 'Yellow', 'RosyBrown', 'SandyBrown', 'NavajoWhite', 'Salmon', 'Goldenrod'];
+            lit_map.on('click', Change_grid);
+            var col = 0;
+            function Change_grid(e) {
+                try {
+                    move_y = e.latlng.lat;
+                    move_x = e.latlng.lng;
+                    var h = 100;
+                    if (document.getElementById('add_grid').checked) {
+
+                        document.getElementById('edite').disabled = false;
+                        polyline1 = L.polyline([
+                            [move_y, move_x],
+                            [move_y + h, move_x + h]
+
+                        ]
+                            , { fillOpacity: 0.51, color: color[col], weight: 2 }).addTo(lit_map);
+                        polyline_grid.push(polyline1);
+                        polyline1.enableEdit();
+                        polyline1.bindTooltip("tooltip", {
+                            permanent: true,
+                            direction: "center",
+                            className: "lhep_obj_tooltip",
+                        })
+                            .openTooltip();
+                        col = col + 1;
+                        if (col > 19) {
+                            col = 0;
+                        }
+                    }
+                    else {
+                        console.log(2);
+                    }
+                }
+                catch {
+
+                }
+            };
+
+
+        </script>
+</body>
+
+</html>

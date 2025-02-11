@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script   src="https://code.jquery.com/jquery-3.6.3.js"   integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="filters">
+
+    </div>
+
+
+         <input type=button value=aaa onclick="get_sql_where('type=sql','filters')">
+<script>
+        url = "https://hr.jinr.ru/hrlhep/hrlhep?c=utils/get_hr_filter&type=html";
+    function ajax_fill(url,div_name){
+                fetch(url)
+                .then((response) => {
+                    if (response.ok) {
+                        console.log('load connected ');
+                        return response.text();
+                    } else {
+                        console.log('load failed');
+                    }
+                })
+                .then((text) => {
+                    let divcont=document.getElementById(div_name);
+                    divcont.innerHTML=text;
+                });
+        }
+    
+    ajax_fill(url,"filters");
+</script>
+</body>
+</html>

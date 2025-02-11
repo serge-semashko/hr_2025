@@ -1,0 +1,113 @@
+/*KAP_STYLE*/
+
+div {
+    /*    border: 1px solid red;*/
+}
+
+.kap_flex-row {
+    display: flex;
+    font-size: 22px;
+}
+
+.kap_project_beginner_menu {
+    background: #F0F8FF;
+}
+
+.kap_floor {
+    margin-top: 20px;
+}
+
+.kap_button {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.kap_button_style {
+    width: 65%;
+    font-size: 18px;
+    margin: 2px;
+    appearance: none;
+    border: 0;
+    border-radius: 5px;
+    background: #DCDCDC;
+    color: #000000;
+    padding: 8px 16px;
+}
+
+.kap_button_style:hover {
+    background: #808080;
+    color: white;
+}
+
+.kap_button_style:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #cbd6ee;
+}
+
+.kap_create_room {
+    margin-top: 20px;
+}
+
+.kap_tab_style {
+    margin-top: 20px;
+    border: 1px solid black;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+th {
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+}
+
+.kap_button_style_table {
+    font-size: 12px;
+    appearance: none;
+    border: 0;
+    border-radius: 5px;
+    background: #DCDCDC;
+    color: #000000;
+    padding: 6px;
+}
+
+.kap_button_style_table:hover {
+    background: #808080;
+    color: white;
+}
+
+.kap_project_beginner_map {
+    width: 100%;
+    background: #F5F5DC;
+    height: 100vh;
+}
+
+
+
+/*Добавлено для Этажей:*/
+.kap_project_beginner_map {
+    width: 70%;
+}
+.kap_table_vis {
+    display: none;
+}
+.kap_button_style {
+    width: 95%;
+    align-items: center;
+    margin-bottom: 5px;
+    /*white-space: pre-line;*/
+}
+.kap_project_beginner_menu {
+    width: 30%;
+}
+.kap_button_style_file {
+    width: 80%;
+    position: relative;
+    left:45%;
+    transform: translate(-48%, 0);
+}

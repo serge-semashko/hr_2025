@@ -1,0 +1,494 @@
+
+
+[comments]
+    descr=U: Корневой модуль. 
+    output=Загружает скрипты, CSS, форму, выводит закладки, загружает закладку по умолчанию
+    parents=edo.properties
+    childs=dat/common.dat,admin/admin.cfg
+    author=Семашко
+[end]
+
+
+[parameters]
+    title=HR LHEP
+    request_name=User:test
+    LOG=ON
+[end]
+   
+       
+[report]
+    $SET_PARAMETERS_SESSION  logged=y;  ??USER_ID
+    $SET_PARAMETERS_SESSION  logged=;  ??!USER_ID
+    $INCLUDE [fill rigths] ??logged
+    $INCLUDE [top]
+    
+
+    $INCLUDE [tabs] ??logged
+    
+    <img id="mainwall" src="#imgPath#JINR_wall.jpg" > ??!logged
+    <script>
+        window.addEventListener("resize", myResize);
+        myResize();
+        function myResize(){
+            var scrW = window.innerWidth-55; 
+            var scrH = window.innerHeight-105;
+            $('#mainwall').css('padding',20);
+            $('#mainwall').css('width',scrW);
+            $('#mainwall').css('height',scrH);
+            $('#mainwall').css('display','block');
+            $('#mainwall').css('margin','auto');
+//     margin-left: auto;
+//    margin-right: auto }
+        }
+    </script>
+
+    $INCLUDE main.cfg[bottom] 
+[end]
+
+
+[login-logout link]   	
+    <a href="http://login.jinr.ru/cgi-bin/authorize?client_id=#OAUTH_APPLICATION_ID#&backurl=#ServerPath#/hrlhep/hrlhep" target="_top" class="enter" title="Войти с помощью JINR Single Sign-On">Вход</a> ??!USER_ID
+    <span style="color: ##E5EBEA;">#USER_NAME#</span> <a href="http://login.jinr.ru/cgi-bin/exit" target="_top" class="enter">Выход</a>                                                ??USER_ID
+[end]
+
+
+[fill rigths]
+    $LOG2 <br> show params before  zeros <br>personal_view '#personal_view#'   dev_admin '#dev_admin#' fin_filter '#fin_filter#' pers_filters '#pers_filters#' fte_filter '#fte_filter#' premii_filter '#premii_filter#' report_view '#report_view#' <br> 
+    $SET_PARAMETERS_SESSION  pers_admin=;full_adm=;right_level=;fin_adm=;fte_adm=;full_fte=;fte_view=;dev_adm=;premii_filter=;fte_filter=;fin_filter=;pers_filter=;report_view=;export1c_right=;personal_view=;mission_view=;
+    $SET_PARAMETERS_SESSION  personal_place_admin=;personal_place_view;map_edit_n=;staff_report_view=;map_topo=;utility_lines=;personal_edit=;flat_debt_view=;salary_filter=
+
+    $SET_PARAMETERS_SESSION  payment_detail=;full_admin=;fin_admin=;fte_admin=;ftelit_admin=;dev_admin=;personal_filters=;fte_cost=;salary_admin=;salary_view=;bonus_wrmode=;map_edit=;payment_view=;bonus_nica=;bonus_edit;bonus_nica_all=;
+
+    $LOG2 <br> after params after zeros personal_view '#personal_view#' dev_admin '#dev_admin#' fin_filter '#fin_filter#' pers_filters '#pers_filters#' fte_filter '#fte_filter#' premii_filter '#premii_filter#' report_view '#report_view#' <br> 
+
+
+    $LOG2 dev_admin USER_KOD_FL #dev_admin# <br>        
+    $SET_PARAMETERS_SESSION USER_KOD_FL=388 ??USER_KOD_FL=__3663
+    $LOG2 after dev_admin USER_KOD_FL #dev_admin# <br>        
+    
+    
+    $SET_PARAMETERS tab_n=;topparent_code=;subtopparent_code=
+
+    $GET_DATA [check user rights]  
+    $LOG2 <br>=============================user rights = #rights#<br>
+    $JS{
+        var all_rights = prm('rights');
+        var all_rights = all_rights.split(',');
+        for (i in all_rights){
+           if (all_rights[i].trim().length<1) {continue};
+           _$LOG(2,'setSessPrm ' +all_rights[i]+'=Y<br>');
+           setSessPrm(all_rights[i],'Y');
+        }
+    $JS}
+
+    $LOG2 <br>=============================personal filters = #personal_filters#<br>
+$IF personal_filters
+        $JS{
+
+            var filters = prm('personal_filters').split(',');
+            _$LOG(2,'personal filters ======'+filters+'====<br>');
+            
+            for (var i in filters){
+                
+                var el = filters[i].trim();
+               _$LOG(2,'Element ='+el+' '+el.indexOf(' ')+'<br>');
+               var zpos = 0;
+               for (var ind in el){
+                  ch = el[ind];
+                  _$LOG(2,ch+' ='+ch.charCodeAt(0)+' | ');
+                  if (ch.charCodeAt(0) == 32){
+                    zpos = ind;
+                    break;
+                  }
+
+                };
+                if (zpos <1)
+                    { 
+                        continue;
+                    }
+                var name = el.substr(0,zpos).trim();
+                var filter= el.substr(zpos).trim();
+                if (name.length>0 && filter.length>0){
+                    setSessPrm(name,filter);
+                    _$LOG(2,'<br>===>SET prm['+name+']='+filter+'<br>');
+                }
+                                                                                               88
+            }
+        $JS}
+    
+$EIF
+
+    
+    $LOG2 dev_admin #dev_admin# fin_filter #fin_filter# pers_filter #pers_filter#; fte_filter #fte_filter# premii_filter #premii_filter# report_view #report_view# <br> 
+    $SET_PARAMETERS_SESSION user_tab_n=#tab_n#;user_topparent_code=#topparent_code#;user_subtopparent_code=#subtopparent_code#
+    $SET_PARAMETERS_SESSION  user_subtopparent_code=#topparent_code# ??!user_subtopparent_code
+    $SET_PARAMETERS_SESSION  USER_ID=#USER_KOD_FL#
+    $SET_PARAMETERS_SESSION  LAB_ID=#LAB_ID#
+    $SET_PARAMETERS_SESSION  full_admin=Y ??full_adm
+    $SET_PARAMETERS_SESSION  right_level=#right_level#
+    $SET_PARAMETERS_SESSION  fin_admin=Y ??fin_adm
+    $SET_PARAMETERS_SESSION  bonus_wrmode=Y ??bonus_wrmode
+
+    $SET_PARAMETERS_SESSION  fin_filter=#fin_filter# 
+    $SET_PARAMETERS_SESSION  pers_filter=#pers_filter# 
+    $SET_PARAMETERS_SESSION  pers_admin=Y ??pers_admin
+    $SET_PARAMETERS_SESSION  right_level=#right_level#
+    $SET_PARAMETERS_SESSION  fte_admin=Y ??fte_adm
+    $SET_PARAMETERS_SESSION  fte_cost=#fte_cost#
+
+    $SET_PARAMETERS_SESSION  dev_admin=Y ??dev_adm
+    $SET_PARAMETERS_SESSION  full_fte=Y ??full_fte
+    $SET_PARAMETERS_SESSION  ftelit_admin=Y ??fte_admin&LAB_ID=600000
+    $SET_PARAMETERS_SESSION  fte_filter=#fte_filter# 
+    
+    $SET_PARAMETERS_SESSION  fte_view=#fte_view#
+    $SET_PARAMETERS_SESSION  payment_view=#payment_view# 
+    $SET_PARAMETERS_SESSION  salary_view=#salary_view# 
+    $SET_PARAMETERS_SESSION  salary_filter=#salary_filter# 
+
+[end]
+
+
+
+[top]
+    $INCLUDE dat/common.dat[head]
+        <style>
+            body {
+                background:url(#imgPath#wait.gif); ??
+                background-color: ##F5F5F5;
+            }
+        </style>
+        <link rel="icon" type="image/png" href="#imgPath#favicon.png" />
+    </head>
+
+    <body id="body">
+    $INCLUDE dat/common.dat[scripts]
+
+    $INCLUDE dat/common.dat[form]
+<style>
+.flex-container {
+  background: #cccccc;
+  /* We first create a flex layout context */
+  display: flex;
+  
+  /* Then we define the flow direction 
+     and if we allow the items to wrap 
+   * Remember this is the same as:
+   * flex-direction: row;
+   * flex-wrap: wrap;
+   */
+  flex-flow: row wrap;
+  
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-between;
+  
+  padding: 1;
+  margin: 0;
+  list-style: none;
+}
+.flex-item {  
+  background: #cccccc;
+  padding: 3px;  
+  width1: 200px;
+  height: 30px;
+  margin-top: 0px;
+  line-height1: 20px;
+  color: blue;
+  font-weight: bold;
+  font-size: 1em;
+  text-align: center;
+  1justify-content: space-around;
+  1align-self: stretch ;
+}</style>
+
+<div class="header">
+
+    <table class="tab_logo" >
+        <tr>
+            <td class="logotip">
+                <img src="#imgPath#hr_logo.png"> 
+            </td>
+            <td class="name-site GillSansNova"> 
+                Административная информационно-справочная система ОИЯИ
+            </td>
+            <td class="name-site GillSansNova">
+             $INCLUDE [labs select]  ??logged&labs_count>1
+            </td>
+            <td>
+            $INCLUDE [login-logout link] ??UserValidatorClassName=jinr.hrlhep.UserValidator
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+[end]
+
+
+
+[tabs]
+    $JS BT.traceProcessing = true; ??
+    $GET_DATA SQL:select personal_filters from users_v2 where kod_fl = #USER_ID# ??
+
+
+
+    <div id="tabs" style="display:none; width:100%; margin: 0; background: #E5EBEA;">
+
+   $LOG2 !!!!!!!!!!!!!!!!!!RIGHTS right_level '#right_level#' pers_admin '#pers_admin#' personal_view '#personal_view#'
+
+
+
+      <ul id="ltabs">
+
+        <li id="t_personal" class="tabGreen"><a href="##dt_personal"><span>Персонал</span></a></li>??right_level=333|pers_admin|personal_view
+        <li id="t_vacation" class="tabBlue"><a href="##dt_vacation"><span>Отпуска и коммандировки</span></a></li> ??mission_view|personal_view|pers_admin
+        <li id="t_jubilee" class="tabBlue"><a href="##dt_jubilee"><span>Дни рождения</span></a></li> ??right_level=333|pers_admin|personal_view|pers_admin
+        <li id="t_salary" class="tabGreen"><a href="##dt_salary"><span>Заработная плата</span></a></li> ??right_level=333|salary_view|pers_admin
+        <li id="t_payment" class="tabGreen"><a href="##dt_payment"><span>Начисления</span></a></li> ??USER_ID=3305|USER_ID=9056|salary_admin=1|payment_view
+        <li id="t_payment_detail" class="tabGreen"><a href="##dt_payment_detail"><span>Начисления детально</span></a></li> ??payment_detail
+        <li id="t_bonus_otdel" class="tabBlue"><a href="##dt_bonus_otdel"><span>Премии</span></a></li> ??fin_admin|bonus_edit
+        <li id="t_bonus_all" class="tabBlue"><a href="##dt_bonus_all"><span>Премии Подразделений</span></a></li> ??fin_admin|bonus_edit&LAB_ID=100000
+        <li id="t_bonus_nica" class="tabBlue"><a href="##dt_bonus_nica"><span>Премии NICA</span></a></li> ??bonus_nica&LAB_ID=100000
+        <li id="t_bonus_nica_all" class="tabBlue"><a href="##dt_bonus_nica_all"><span>Премии NICA все</span></a></li> ??bonus_nica_all&LAB_ID=100000
+        <li id="t_bonus_fond" class="tabBlue"><a href="##dt_bonus_fond"><span>Фонды</span></a></li> ??right_level=333|bonus_fond&LAB_ID=100000
+        <li id="t_fte" class="tabGreen"><a href="##dt_fte"><span>FTE</span></a></li>         ??fte_admin&LAB_ID=100000
+        <li id="t_ftediv" class="tabGreen"><a href="##dt_ftediv"><span>FTE подразделений</span></a></li>         ??full_admin&LAB_ID=100000
+        <li id="t_ftelit" class="tabGreen"><a href="##dt_ftelit"><span>Темы/проекты</span></a></li>         ??fte_admin&LAB_ID=600000
+        <li id="t_reports_staff" class="tabRed"><a href="##dt_reports_staff"><span>Отчеты по персоналу</span></a></li>  ??staff_report_view
+        <li id="t_reports" class="tabRed"><a href="##dt_reports"><span>Сводные отчеты</span></a></li>  ??report_view
+        <li id="t_iss" class="tabBlue"><a href="##dt_iss"><span>Импорт из ИСС</span></a></li> ??
+        <li id="t_mapbuilding" class="tabBlue"><a href="##dt_mapbuilding"><span>План корпус 134ЛИТ</span></a></li> ??LAB_ID=600000|map_lit134
+        <li id="t_LHEP_215" class="tabBlue"><a href="##dt_LHEP_215"><span>План ЛФВЭ 215</span></a></li> ??LAB_ID=100000
+        <li id="t_LHEP_201" class="tabBlue"><a href="##LHEP_201"><span>План ЛФВЭ 201</span></a></li> ??LAB_ID=100000
+        <li id="t_LHEP_32" class="tabBlue"><a href="##dt_LHEP_32"><span>План ЛФВЭ 32</span></a></li> ??LAB_ID=100000
+
+        <li id="t_mapedit" class="tabBlue"><a href="##dt_mapedit"><span>Редактор карты</span></a></li> ??map_edit_n
+        <li id="t_map" class="tabBlue"><a href="##dt_map"><span>Карта ОИЯИ</span></a></li>  ??LAB_ID=600000|map_view
+        <li id="t_personal_place" class="tabBlue"><a href="##dt_person_place"><span>Размещение персонала</span></a></li> ??personal_place_admin|personal_place_view|personal_place_edit
+        <li id="t_div_place" class="tabBlue"><a href="##dt_div_place"><span>Размещение подразделений</span></a></li> ??personal_place_admin|personal_place_view&construct
+        <li id="t_gradescale" class="tabRed"><a href="##dt_gradescale"><span>Шкала</span></a></li> ??
+        <li id="t_upgrade" class="tabRed"><a href="##dt_upgrade"><span>Повышение по шкале</span></a></li> ??
+        <li id="t_stavki" class="tabRed"><a href="##dt_stavki"><span>Ставки</span></a></li> ??
+      </ul>
+            <div style="clear:both;"></div>
+
+    ====================== Контейнеры содержимого закладок ============================ ??
+
+            <div id="dt_personal"><div id="c_personal" class="cont 1topGreen" >...</div></div>??right_level=333|pers_admin|personal_view
+            <div id="dt_vacation"><div id="c_vacation" class="cont 1topBlue" ></div></div>  ??mission_view|personal_view
+            <div id="dt_jubilee"><div id="c_jubilee" class="cont 1topBlue" ></div></div> ??right_level=333|pers_admin|personal_view
+            <div id="dt_salary"><div id="c_salary" class="cont 1topGreen" >...</div></div>	??right_level=333|salary_view=Y&LAB_ID=100000
+            <div id="dt_payment"><div id="c_payment" class="cont 1topGreen" >...</div></div>	??USER_ID=3663|USER_ID=3305|USER_ID=9056|salary_admin=1|payment_view
+            <div id="dt_payment_detail"><div id="c_payment_detail" class="cont 1topGreen" >...</div></div>	??payment_detail
+            <div id="dt_bonus_otdel"><div id="c_bonus_otdel" class="cont 1topBlue" >...</div></div>    ??fin_admin|bonus_edit
+            <div id="dt_bonus_all"><div id="c_bonus_all" class="cont 1topBlue" >...</div></div>    ??fin_admin|bonus_edit
+            <div id="dt_bonus_nica"><div id="c_bonus_nica" class="cont 1topBlue" >...</div></div>    ??bonus_nica
+            <div id="dt_bonus_nica_all"><div id="c_bonus_nica_all" class="cont 1topBlue" >...</div></div>    ??bonus_nica_all
+            <div id="dt_bonus_fond"><div id="c_bonus_fond" class="cont 1topBlue" >...</div></div>    ??right_level=333|bonus_fond
+            <div id="dt_fte"><div id="c_fte" class="cont topGreen" >...</div></div>	??fte_admin&LAB_ID=100000
+            <div id="dt_ftediv"><div id="c_ftediv" class="cont 1topGreen" >...</div></div>	??full_admin&LAB_ID=100000
+            <div id="dt_ftelit"><div id="c_ftelit" class="cont 1topGreen" >...</div></div>	??ftelit_admin&LAB_ID=600000
+
+            <div id="dt_reports_staff"><div id="c_reports_staff" class="cont 1topBlue">...</div></div> ??staff_report_view
+            <div id="dt_reports"><div id="c_reports" class="cont 1topBlue">...</div></div> ??report_view
+            <div id="dt_iss"><div id="c_iss" class="cont 1topBlue" >...</div></div>  ??USER_ID=3663
+            <div id="dt_mapedit"><div id="c_mapedit" class="cont" >...</div></div>  ??map_edit_n
+
+            <div id="dt_mapbuilding"><div id="c_mapbuilding" class="cont" >...</div></div>  ??LAB_ID=600000|map_lit134
+            <div id="dt_LHEP_215"><div id="c_LHEP_215" class="cont" >...</div></div>  ??LAB_ID=100000
+            <div id="dt_LHEP_201"><div id="c_LHEP_201" class="cont" >...</div></div>  ??LAB_ID=100000
+            <div id="dt_LHEP_32"><div id="c_LHEP_32" class="cont" >...</div></div>  ??LAB_ID=100000
+            <div id="dt_map"><div id="c_map" class="cont" >...</div></div>              ??LAB_ID=600000|map_view
+            <div id="dt_personal_place"><div id="c_personal_place" class="cont 1topBlue" >...</div></div>  ??personal_place_admin|personal_place_view
+            <div id="dt_div_place"><div id="c_div_place" class="cont" >...</div></div>  ??LAB_ID=600000|map_lit134
+            <div id="dt_gradescale"><div id="c_gradescale" class="cont 1topBlue" >...</div></div>  ??dev_admin=Y
+            <div id="dt_upgrade"><div id="c_upgrade" class="cont 1topBlue" >...</div></div>  ??dev_admin=Y
+            <div id="dt_stavki"><div id="c_stavki" class="cont 1topRed">...</div></div> ??
+    </div>
+    $JS BT.traceProcessing = false; ??
+[end]
+
+[labs select]
+        Выбор лаборатории
+        <select name="user_labs_select" class=norm onchange="
+                        seltext = this.options[this.selectedIndex].value;                         
+                        window.location = '?def_lab='+seltext;
+            "    >
+            #user_labs#
+        </select>
+[end]
+
+
+[check user rights]
+    update users_v2 set def_lab=1 where kod_fl = #USER_KOD_FL# and lab_id=#def_lab#;                          ??def_lab
+    update users_v2 set def_lab=0 where kod_fl = #USER_KOD_FL# and lab_id<>#def_lab#;                          ??def_lab
+
+    select count(*) as labs_count  
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#;
+
+    select 
+        concat('<option value="', lab_id, '" ' 
+        , case when def_lab=1 then 'selected' else '' end 
+        , '>' , (select name from struktura where id=lab_id), '</option>') as user_labs
+    from users_v2 where 
+    kod_fl = #USER_KOD_FL#;
+
+   select concat(f,' ',i,' ',o) as USER_NAME
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+
+    select pers_admin as pers_admin
+    from users_v2 where 
+    pers_admin>0 and
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+    
+    select lab_id as LAB_ID
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+
+
+    select 'Y' as report_view
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%report_view%";
+
+    select 'Y' as salary_view
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%salary_view%";
+    select 'Y' as payment_view
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%payment_view%";
+
+
+    select 'Y' as fte_cost
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%fte_cost%";
+
+
+    select 'Y' as map_edit
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+        
+           and rights like "%map_edit%";
+
+    select 'Y' as personal_place_admin
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%personal_place_admin%";
+    select 'Y' as bonus_wrmode 
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%bonus_wrmode%";
+    select rights 
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+
+    select right_level
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+
+    select 'Y' as full_adm,  'Y' as fin_adm,'Y' as full_fte, 'Y' as fte_view 
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and right_level>30;
+
+   select salary_admin 
+     from users_v2 where 
+     salary_admin >0 AND
+     kod_fl = #USER_KOD_FL#  and def_lab = 1;
+$LOG2 salary_admin=#salary_admin#<br>
+
+
+   select 'Y' as fte_admin 
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and fte_admin>=1;
+
+   select 'Y' as full_fte , 'Y' as fte_view 
+     from users_v2 where 
+        kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and fte_admin=3;
+
+   select 'Y' as fte_view 
+     from users_v2 where 
+           kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and fte_admin=2;
+
+   select 'Y' as fin_adm 
+     from users_v2 where 
+           kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and fin_admin>=1;
+
+
+   select 'Y' as dev_adm 
+     from users_v2 where 
+           kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and dev_admin>=1;
+
+    select 'Y' as salary_view
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%salary_view%";
+
+    select 'Y' as bonus_fond
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+           and rights like "%bonus_fond%";
+
+   
+   select personal_filters         
+     from users_v2 where 
+           kod_fl = #USER_KOD_FL#  and def_lab = 1;
+    select distinct tab_n, topparent_code, subtopparent_code from sotrudniki where person_id=#USER_KOD_FL# and lab_id=#LAB_ID#;
+    select rights as user_rights 
+     from users_v2 where 
+     kod_fl = #USER_KOD_FL#  and def_lab = 1
+
+[end]
+
+[bottom]
+
+    ----------------- Вспомогательное - сообщение о загрузке --------------- ??
+    <div id="loadingMsg" class="hid">
+        <div id="loadingCont" style="margin:10px; margin-left:150px; 
+            background-color_:white; width:300px; border_:solid 1px ##808080;">
+            <center><h4>Загрузка</h4><br><img src="#imgPath#wait.gif" width="48" height="48" border="0"></center>
+        </div>
+    </div>
+
+    <input type=submit value="S" obClick="doSubmit(); return false;" style="display:none;">
+    </form>
+    $INCLUDE main.cfg[logged bottom] ??logged
+    </body></html>
+[end]
+
+
+[logged bottom]
+$INCLUDE dat/common.dat[popup divs]
+$SET_PARAMETERS showFrames=on;
+
+$INCLUDE dat/debugTools.dat[debug links] ??full_admin=Y
+
+======================== STARTUP SCRIPT =========================================== ??
+
+$INCLUDE free/main_js_noDB.cfg[startup script] 
+    $SET_PARAMETERS showFrames=off
+    <iframe width=800 
+    height=0 frameborder="0" ??!showFrames=on
+    height=200 scrolling="auto" frameborder="1" style="border:dotted 1px ##a0e0a0;" ??showFrames=on
+    name="wf" id="wf"></iframe>  
+
+[end]
+    <iframe width=800 
+    height=0 frameborder="0" ??!showFrames=on
+    height=200 scrolling="auto" frameborder="1" style="border:dotted 1px ##a0e0a0;" ??showFrames=on
+    name="wf" id="wf"></iframe>  
+
+
+
+

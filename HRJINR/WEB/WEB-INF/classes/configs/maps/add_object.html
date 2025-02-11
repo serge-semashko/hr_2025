@@ -1,0 +1,220 @@
+
+
+
+[decription]
+[end]
+
+
+[main]
+$LOG2 INCLUIDE JS OK !!!!!!!!!!!!!!!!!!!!!!<br>
+
+<script>
+</script>
+<script>
+    function add_object(el, obj) {
+        var el_num = el.replace('T','');
+        var road = roads[el];
+        var lr = L.layerGroup();
+        var rname = road['obj_name'];
+        var tooltip = road['tooltip'];
+        if  (road['div_owner'].trim().length  >3 & (road['o_type'] == 2) ) {
+            road.map_object_type = 'b_'+road['div_owner'].trim();
+		console.log(road.map_object_type+'|'+road['div_owner']+'|'+road['div_owner'].trim().length)
+        };
+
+        console.log('el=' + el + ' road name' + rname);
+        var latlngs = JSON.parse(road['points']);
+        //debugger;
+        var obj_desc = map_object_types[road.map_object_type];
+        //console.log('Add el='+el+' begin el'+JSON.stringify(road)+' obj_type='+road.map_object_type+' color='+obj_desc.val2);
+        if (typeof obj_desc == "undefined") {
+            //debugger;
+        }
+        var obj_color = obj_desc.val2;
+        road['o_color'] = '##' + obj_color;
+        var polyline = '--';
+        if (road['o_type'] == 1) {
+            polyline = L.polyline(latlngs, {color: '##' + obj_color, weight: 4});
+            if (road.map_object_type.indexOf('UL_') < 0 & road.map_object_type.indexOf('l_tr') < 0) {
+                polyline.setText(road['tooltip'], {repeat: false, center: true,
+                    offset: 10,
+                    attributes: {'font-weight': 'italic',
+                        'font-size': '12'}});
+            }
+            console.log(road.map_object_type + '===' + road.map_object_type.indexOf('UL_'))
+            if (road.map_object_type.indexOf('UL_') >= 0) {
+                polyline.bindPopup(road['tooltip'] + ' ' + el + ' Глубина 2м', {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+                road['obj_name'] = road['tooltip'] + ' ' + el + ' Глубина 2м';
+            }
+
+
+            if (road.map_object_type.indexOf('UL_') < 0 & road.map_object_type.indexOf('l_tr') < 0) {
+                polyline.addTo(mymap);
+            } else {
+                console.log(' bind pop up ' + road['descr'])
+                for (i in timetables) {
+                    if (road.obj_name.trim() == timetables[i][0].trim()) {
+                        polyline.bindPopup('<table>' + timetables[i][1] + '</table>', {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+                        break;
+                    }
+                }
+
+            }
+
+        }
+        ;
+        let contr_href = '';
+        if (road['o_type'] == 2) {
+            if (road['div_owner'].indexOf('LHEP') > -1) {
+//               contr_href =  '<p> <a href="https://sed.jinr.ru/s?c=ap&mod=dog_list_by_building&building_owner=' +el_num.trim() + '" target="_blank">Д</a> </p>' ??lhep_contract
+           }
+            polyline = L.polygon(
+                    latlngs
+                    , {fillOpacity: 0.51, color: '##' + obj_color, weight: 2}).addTo(mymap);
+                    polyline.bindTooltip(road['tooltip'] + contr_href
+                    ,  {permanent: true, direction:"center", className: 'lhep_obj_tooltip'}
+                    ).openTooltip()
+        }
+        if (road['o_type'] == 3) {
+            let size_x = +road['size_x'];
+            let size_y = +road['size_y'];
+
+
+            polyline = L.marker(latlngs, {icon: obj_desc['icon']}).addTo(mymap);
+
+
+            if (size_x * size_x > 0) {
+                let icon = polyline.options.icon;
+                icon.options.iconSize = [size_x, size_y];
+                icon.options.iconAnchor = [parseInt(size_x / 2), size_y];
+
+                polyline.setIcon(icon);
+            }
+        }
+        if (road['o_type'] == 4) {
+            let size_x = +road['size_x'];
+            let size_y = +road['size_y'];
+            let radius = latlngs.pop();
+
+            polyline = L.circle(latlngs, {fillOpacity: 0.51, color: '##' + obj_color, radius: radius});
+            if (road.map_object_type.indexOf('UL_') >= 0) {
+                polyline.bindPopup(road['tooltip'], {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+            } else {
+                polyline.addTo(mymap);
+            }
+
+        }
+
+
+        if (road['show_tt'] == 0) {
+//                    polyline.bindTooltip(road['tooltip'],
+//                       {permanent: true, direction:"center", className: 'lhep_obj_tooltip'}
+//                    ).openTooltip()
+        }
+
+
+        if (road['descr'].trim().length > 0) {
+            if (road['div_owner'].indexOf('LHEP') > -1) {
+                let sname = road['tooltip'].toString().trim();
+                polyline.bindPopup(road['descr'] 
+                        + '<p> <a href="https://sed.jinr.ru/s?c=ap&mod=dog_list_by_building&building_owner=' +el_num.trim() + '" target="_blank">Дговора в SED по корпусу</a> </p>' ??lhep_contract
+                        + '<p> <a href="https://hr.jinr.ru/hrlhep/hrlhep?c=plans/lhep/bld_docs&bld_id=' +el_num.trim() + '&b_name=\''+sname+'\'"  target="_blank">Документация по корпусу(файлы)</a> </p>' ??lhep_contract
+                        , {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+            } else {
+                polyline.bindPopup(road['descr'], {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+            }
+        }
+        if (road.map_object_type.indexOf('b_LRB') > -1) {
+            let descr = '<div class="LABBLOCK_PHOTO"> <img src="images/labs/LRB_lab.jpg" width=300> </div>' +
+                    '<h3>Лаборатория радиационной биологии</h3>' +
+                    '<p>Основные направления исследований, проводимых сотрудниками Лаборатории радиационной биологии (ЛРБ): радиационная генетика и радиобиология; радиационная физиология и нейрохимия; математическое моделирование биофизических систем; астробиология; физика защиты от излучений и радиационные исследования на ядерно-физических установках Института.</p>' +
+                    '<p> <a href="http://lrb.jinr.ru/index.php/ru/" target="_blank">Сайт лаборатории</a> </p>';
+            polyline.bindPopup(descr, {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+        }
+
+
+        if (road.map_object_type.indexOf('b_FLNP') > -1) {
+            let descr = '<img src="images/labs/FLNP_lab.jpg" width=300>' +
+                    '<h3>Лаборатория нейтронной физики им. И.М.Франка</h3>' +
+                    '<p>В Лаборатории нейтронной физики (ЛНФ) развивается комплексная амбициозная научная программа по исследованию нейтрона как элементарной частицы, а также по его применению в области ядерной физики, физики конденсированных сред и в ряде современных прикладных научных исследований.</p>' +
+                    '<p> <a href="http://flnph.jinr.ru" target="_blank">Сайт лаборатории</a> </p>';
+            polyline.bindPopup(descr, {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+        }
+
+
+
+        if (road.map_object_type.indexOf('b_FLNR') > -1) {
+            let descr = '<img src="images/labs/FLNR_lab.jpg" width=300>' +
+                    '<h3>Лаборатория ядерных реакций им. Г.Н.Флерова</h3>' +
+                    '<p>Научная программа Лаборатории ядерных реакций (ЛЯР) включает в себя эксперименты по синтезу и исследованию' +
+                    ' ядерно-физических и химических свойств новых сверхтяжелых элементов, исследованию реакций слияния-деления и ' +
+                    'многонуклонных передач при столкновении тяжелых ионов; изучению свойств ядер на границе нуклонной стабильности ' +
+                    'и механизмов ядерных реакций с ускоренными радиоактивными ядрами; исследованию взаимодействия тяжелых ионов с различными ' +
+                    'материалами (полимеры, полупроводники, электронные компоненты космической техники и т.д.).</p>' +
+                    '<p> <a href="http://flerovlab.jinr.ru/" target="_blank">Сайт лаборатории</a> </p>';
+
+            polyline.bindPopup(descr, {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+        }
+
+        if (road.map_object_type.indexOf('b_MLIT') > -1) {
+            let descr = '<img src="images/labs/MLIT_lab.jpg" width=300><h3>Лаборатория информационных технологий им. М.Г.Мещерякова</h3>' +
+                    '<p>Основные направления деятельности Лаборатории информационных технологий (ЛИТ) связаны с обеспечением сетевыми, вычислительными и информационными ресурсами,' +
+                    'а также с математической поддержкой широкого спектра исследований, проводимых в ОИЯИ в области физики высоких энергий, ядерной физики, физики конденсированных' +
+                    'сред и т. д.</p> <p> <a href="https://lit.jinr.ru" target="_blank">Сайт лаборатории</a> </p>';
+
+            polyline.bindPopup(descr, {autoPanPaddingTopLeft: [50, 50], className: 'lhep_obj_popup'}).on;
+        }
+
+
+
+
+        road['_leaflet_id'] = polyline._leaflet_id;
+        road['leaflet_obj'] = polyline;
+        tbl = $('##' + road['map_object_type'])[0];
+
+        if (road['map_object_type'] == 'm_cluster') {
+            tbl = $('##b_NICA')[0];
+        }
+
+
+        //console.log('##'+road['map_object_type']+' '+tbl);
+        if (typeof tbl == "undefined")
+            return;
+
+        var row = tbl.insertRow(-1);
+        var c1 = row.insertCell();
+        showname = '';
+
+        if (road['o_type'] == 1) {
+            showname = road['obj_name'];
+        }
+        if (road['o_type'] == 2) {
+            showname = road['tooltip'];
+        }
+        if (road['o_type'] == 4) {
+            showname = road['tooltip'];
+        }
+        if (road['o_type'] == 3) {
+            showname = road['tooltip'];
+            iconUrl = polyline.options.icon.options.iconUrl;
+//                if (road['map_object_type']=='m_transport')
+            {
+                showname = '<img src="' + iconUrl + '" width="10" height="15">' + showname;
+            }
+
+        }
+
+        c1.innerHTML = '<label><input type="checkbox"  class=show_' + road.map_object_type + '  idobj=' + el.trim() + ' id=blink' + el + ' onclick="centerMap(this)">' + showname + '</input></label>';
+
+        polyline.on(
+                'click',
+                function (e) {
+                    L.DomEvent.stopPropagation(e);
+                });
+    }
+//==============================
+</script>	
+
+[end]
+
+

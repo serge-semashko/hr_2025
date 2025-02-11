@@ -1,0 +1,88 @@
+[comments]
+descr=JavaScript для работы с табами
+testURL=free/js_tabs.dat
+[end]
+
+[report]
+/*=============================== TABs ====================================*/ ??
+/*=========================================================================*/ ??
+
+var t_personal = function () {AjaxCall("c_personal", "c=tab_personal"); } // Клик на табе "Персонал" 
+var t_vacation = function () {AjaxCall("c_vacation", "c=tab_vacation"); } // Клик на табе "vacation" 
+var t_jubilee = function () {AjaxCall("c_jubilee", "c=tab_jubilee"); } // Клик на табе "Юбилей" 
+var t_lit_bonus_otdel = function () {AjaxCall("c_lit_bonus_otdel", "c=lit_tab_bonus_otdel"); } // Клик на табе "Премии ЛИТ"  
+var t_bonus_otdel = function () {AjaxCall("c_bonus_otdel", "c=tab_bonus_otdel"); } // Клик на табе "Премии" 
+var t_bonus_all = function () {AjaxCall("c_bonus_all", "c=tab_bonus_all"); } // Клик на табе "Премии" 
+var t_bonus_nica = function () {AjaxCall("c_bonus_nica", "c=tab_bonus_nica"); } // Клик на табе "Премии NICA" 
+var t_bonus_nica_all = function () {AjaxCall("c_bonus_nica_all", "c=tab_bonus_nica_all"); } // Клик на табе "Премии NICA all" 
+var t_bonus_fond = function () {AjaxCall("c_bonus_fond", "c=tab_bonus_fond"); } // Клик на табе "Фонд Премии" 
+var t_salary = function () {AjaxCall("c_salary", "c=tab_salary"); } // Клик на табе "Заработная плата" 
+var t_payment = function () {AjaxCall("c_payment", "c=tab_payment"); } // Клик на табе "Начисления" 
+var t_payment_detail = function () {AjaxCall("c_payment_detail", "c=tab_payment_detail"); } // Клик на табе "Начисления" 
+var t_fte = function() {AjaxCall("c_fte", "c=tab_fte"); }
+var t_ftediv = function() {AjaxCall("c_ftediv", "c=tab_ftediv"); }
+var t_ftelit = function() {AjaxCall("c_ftelit", "c=tab_ftelit"); }
+var t_povysh = function() {AjaxCall("c_povysh", "c=tab_povysh");}
+
+var t_reports = function() {AjaxCall("c_reports", "c=tab_reports");}; 
+var t_reports_staff = function() {AjaxCall("c_reports_staff", "c=tab_reports_staff");}; ??staff_report_view
+var t_reports_hr = function() {AjaxCall("c_reports_hr", "c=tab_reports_staff-hr");}; 
+
+var t_samples = function() {AjaxCall("c_samples", "c=tab_samples");} 
+var t_iss = function() {AjaxCall("c_iss", "c=tab_iss");} 
+var t_mapedit = function() {AjaxCall("c_mapedit", "c=tab_rnd");} 
+var t_mapbuilding = function() {AjaxCall("c_mapbuilding", "c=/maps/map_building");} 
+var t_LHEP_215 = function() {AjaxCall("c_LHEP_215", "c=/plans/lhep/iframe215.cfg");} 
+var t_LHEP_215_admin = function() {AjaxCall("c_LHEP_215_admin", "c=/plans/lhep/215/iframe215.cfg");} ??LAB_ID=100000&rooms_edit
+var t_LHEP_32 = function() {AjaxCall("c_LHEP_32", "c=/plans/lhep/32/iframe32.cfg");} 
+var t_LHEP_201 = function() {AjaxCall("c_LHEP_201", "c=/plans/lhep/201/iframe201.cfg");} 
+var t_map = function() {AjaxCall("c_map", "c=tab_map");} 
+var t_personal_place = function() {AjaxCall("c_personal_place", "c=tab_personal_place");} 
+var t_div_place = function() {AjaxCall("c_div_place", "c=tab_div_place");} 
+var t_rooms = function() {AjaxCall("c_rooms", "c=tab_rooms");} 
+var t_rooms_ppls = function() {AjaxCall("c_rooms_ppls", "c=tab_rooms_ppls");} 
+var t_upgrade = function() {AjaxCall("c_upgrade", "c=tab_upgrade");} 
+var t_gradescale = function() {AjaxCall("c_gradescale", "c=tab_gradescale");} 
+var t_salary_income = function() {AjaxCall("c_salary_income", "c=tab_salary_income");} 
+var t_plans_lhep = function() {AjaxCall("c_plans_lhep", "c=tab_plans_lhep");} 
+
+
+//console.log("start loading");
+var setTabsClicks=function(tabDivId, act)
+{
+	var a = 0;
+	if (act) a = act;
+	$( "##" + tabDivId ).tabs({
+		active: a,
+		beforeActivate: function( ev, ui ) 
+	{
+    var old_cont = atab.replace("t_", "c_");
+   console.log(old_cont + " / " + atab + " => " + ui.newTab[0]["id"]); 
+      if(tabDivId !== "info_tabs") 
+        $(".cont").html(""); //очистить все табы, если работаем не с под-табами (справочник)
+      try { document.theForm.srt.value=""; } catch (e) {;}
+			atab=ui.newTab[0]["id"];
+			eval(atab + "();");
+	}
+});
+};
+
+//console.log("Loaded");
+var clickTab=function(id)
+{
+	console.log(id); ??
+showProps($("##" + id + " a"));  ??
+	$("##" + id + " a").click();
+};
+
+var setLang=function(lang){
+  frm.target="";
+  frm.lang_.value=lang;
+  frm.c.value='#c#';
+  frm.submit();
+}
+
+var openTabById=function(id){
+$('##tabs').tabs( "option", "active", $('##ltabs li').index($('##'+id)) );
+}
+[end]
