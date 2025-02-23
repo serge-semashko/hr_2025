@@ -302,8 +302,8 @@ var buildings_info = {
         initZoom: 4,
 
         floors: [-1,1, 2, 3, 4, 5, 6],
-        scaleX: 0.01,
-        scaleY: 0.01,
+        scaleX: 1,
+        scaleY: 1,
         scales: {
             "-1": [1, 1],
             1    : [1, 1],

@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="24">
         <file>
-            <url>WEB-INF/classes/configs/tab_reports_staff_chart.cfg</url>
-            <bookmark id="23">
-                <name/>
-                <line>836</line>
-                <key/>
-            </bookmark>
-            <bookmark id="24">
-                <name/>
-                <line>1915</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
             <url>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/main.cfg</url>
             <bookmark id="3">
                 <name/>
@@ -35,6 +22,19 @@
             <bookmark id="19">
                 <name/>
                 <line>358</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>WEB-INF/classes/configs/tab_reports_staff_chart.cfg</url>
+            <bookmark id="23">
+                <name/>
+                <line>836</line>
+                <key/>
+            </bookmark>
+            <bookmark id="24">
+                <name/>
+                <line>1915</line>
                 <key/>
             </bookmark>
         </file>
@@ -110,6 +110,12 @@
             <file>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/tab_iss_table.cfg</file>
             <file>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/utils.cfg</file>
         </group>
-        <group/>
+        <group>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/plan_alone_js.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/plans_info.js</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/mlit_/134n.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/mlit_/plan_alone.js</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/mono_editor.html</file>
+        </group>
     </open-files>
 </project-private>
