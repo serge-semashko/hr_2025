@@ -33,6 +33,9 @@ $BREAK ??!room_plan_view&!room_plan_edit
 
 
     <style>
+        .easyPrintHolder .a3CssClass { 
+          background-image: url(data:image/svg+xml;utf8;base64,PD9...go=);
+        }        
       .leaflet-container {
         height: 98%;
         width: 98%;
@@ -455,12 +458,17 @@ $BREAK ??!room_plan_view&!room_plan_edit
 
 		var printer = L.easyPrint({
       		// tileLayer: tiles,
-      		sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+      		sizeModes: ['Current'], // 'A4Landscape', 'A4Portrait'],
       		filename: 'план этажа',
       		exportOnly: true,
-      		hideControlContainer: true
+      		hideControlContainer: false
 		}).addTo(lit_map);
-
+                var a3Size = {
+                        width: 2339,
+                        height: 3308,
+                        className: 'a3CssClass',
+                        tooltip: 'A custom A3 size'
+                }
 		function manualPrint () {
 			printer.printMap('CurrentSize', 'MyManualPrint')
 		}
@@ -1382,7 +1390,8 @@ if(e.keyCode == 13){
         }
       }
       function rescaleXY([x, y]) {
-        return [x * scaleX, y * scaleY];
+        return [ x * scaleX, y * scaleY];
+//        return [ 100.6 - y * scaleY, x * scaleX];
 //          return [100 - y/100 -8, x/100 +  47.44 ];
       }
       function unscaleXY([x, y]) {

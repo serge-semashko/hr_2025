@@ -219,6 +219,11 @@ var buildings_info = {
     },
 
     k215: {
+        
+        bounds: [
+            [0, 0],
+            [ 2970/4, 4204  / 4 ]
+            ],
         center: [76, 50],
         initZoom: 4,
 
