@@ -201,6 +201,9 @@ var phones = [];
 [end]
 
 [draw rooms]
+$SET_PARAMETERS lab_dir=1;owner=LHEP ??LAB_ID=100000
+$SET_PARAMETERS lab_dir=MLIT;owner=MLIT ??LAB_ID=600000
+$SET_PARAMETERS lab_dir=LRB;owner=LRB ??LAB_ID=90000
 
 var check_sel;
 var che;
@@ -463,7 +466,8 @@ function addRooms() {
         roomsGrp.clearLayers();
 //        console.log(' Begin  add Rooms ' + roomsGrp + ' lit=' + 'JSON.stringify(lit)');
         check_sel = $("input[type='radio'][name='floornum']:checked").val();
-        image = L.imageOverlay('images/plans/lhep/215-' + check_sel + '.png', bounds).addTo(lit_map);
+        image = L.imageOverlay('plan_editor/images/#lab_dir#/k215_' + check_sel + '.png', bounds).addTo(lit_map);
+        
         let aaa = $("input[type='radio'][name='floornum']:checked");
 //        console.log('aaa=' + aaa);
         let data = rooms_json.layers.Rooms.layerRaws.filter(function (item, i, arr) {

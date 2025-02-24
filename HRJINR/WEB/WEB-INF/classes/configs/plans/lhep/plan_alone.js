@@ -216,7 +216,7 @@ author = Семашко
         var div_color_add = {};
         function hsv_add(hsv){
 
-            console.log('hsv_add '+hsv);
+//            console.log('hsv_add '+hsv);
         if (hsv === undefined){
           hsv=[0,0,1]
         }
@@ -228,7 +228,7 @@ author = Семашко
             let h1= hsv[0] +180 % 360;
             let s1= 1;
             let v1= 1;
-            console.log('hsv_add '+hsv+' ',h1,s1,v1);
+//            console.log('hsv_add '+hsv+' ',h1,s1,v1);
             return hsvToHex([ h1,1,1]);
             return hsvToHex([ h1,s1,v1]);
         }
@@ -1414,7 +1414,9 @@ function addRooms() {
         roomsGrp.clearLayers();
         console.log(' Begin  add Rooms ' + roomsGrp + ' lit=' + 'JSON.stringify(lit)');
         check_sel = $("input[type='radio'][name='floornum']:checked").val();
-        image = L.imageOverlay('images/plans/lhep/215-' + check_sel + '.png', bounds).addTo(lit_map);
+        console.log(' BOUNDS ' + 'JSON.stringify(bounds)');
+        image = L.imageOverlay('plan_editor/images/#lab_dir#/#b_name#_' + check_sel + '.png', bounds).addTo(lit_map);
+        lit_map.fitBounds(bounds);
         let aaa = $("input[type='radio'][name='floornum']:checked");
         console.log('aaa=' + aaa);
         let data = rooms_json.layers.Rooms.layerRaws.filter(function (item, i, arr) {
