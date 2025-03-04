@@ -4,6 +4,8 @@ TEMPLATE
 [comments]
 author = Семашко
 [end]
+[lit divs]
+[end]
 [fill structura menu]
 
     <script>
@@ -1208,114 +1210,6 @@ function centerRoom(room_num) {
 }
 var flip = false;
 
-      var topdivs = [
-        { pname: "Рук.", pcode: 101000, fcolor:"", subdivs: {} },
-        { pname: "Гр. Сов. и К.",fcolor:"", pcode: 102000, subdivs: {} },
-        { pname: "СИСТ", pcode: 103000, fcolor:"",subdivs: {} },
-        {
-          pname: "Отд.№1",
-          pcode: 110000,
-          fcolor:"",
-          subdivs: {
-            112000: { pname: "НЭОИФПУ" },
-            111000: { pname: "НЭОУС" },
-            115000: { pname: "НЭОРС" },
-            117000: { pname: "НИКО" },
-            114000: { pname: "НЭОИКН" },
-            116000: { pname: "НИОСЭН" },
-            113000: { pname: "НТОП" },
-            129000: { pname: "НЭОСМТ" },
-            125000: { pname: "ДСН" },
-            126000: { pname: "НЭСОП" },
-          },
-        },
-        {
-          pname: "Отд.№2",
-          pcode: 120000,
-          fcolor:"",
-          subdivs: {
-            122000: { pname: "НЭОФТИ" },
-            123000: { pname: "НЭОСФМС" },
-            124000: { pname: "СФСКЯ" },
-            127000: { pname: "НЭОТиМПП" },
-          },
-        },
-        {
-          pname: "Отд.№3",
-          pcode: 130000,
-          fcolor:"",
-          subdivs: {
-            135000: { pname: "НЭОФСТИ" },
-            121000: { pname: "НЭОMД" },
-            136000: { pname: "НЭОССАиРП" },
-            137000: { pname: "НЭОБМ" },
-          },
-        },
-        {
-          pname: "Отд.№4",
-          pcode: 140000,
-          fcolor:"",
-          subdivs: {
-            142000: { pname: "НЭОФТИ  LHC" },
-            134000: { pname: "Сф на АТЛАС" },
-            141000: { pname: "НЭОФТИ  RHIC" },
-            132000: { pname: "НЭОФ на CMS" },
-          },
-        },
-        {
-          pname: "Отд.№5",
-          pcode: 150000,
-          fcolor:"",
-          subdivs: {
-            157000: { pname: "СК" },
-            156000: { pname: "СРС" },
-            158000: { pname: "НМОКТС" },
-            151000: { pname: "НЭОАФИ" },
-          },
-        },
-        {
-          pname: "Отд.№6",
-          pcode: 170000,
-          fcolor:"",
-          subdivs: {
-            172000: { pname: "ЦОЭП" },
-            171000: { pname: "КО" },
-            176000: { pname: "САСУТП ЛФВЭ" },
-            170010: { pname: "ГВвЭОиРД" },
-          },
-        },
-        { pname: "ПKO", pcode: 175000,fcolor:"", subdivs: {} },
-        {
-          pname: "ИЭТО",
-          pcode: 189000,
-          fcolor:"",
-          subdivs: {
-            189003: { pname: "Группа №3" },
-            189004: { pname: "Группа №4" },
-            189002: { pname: "Группа №2" },
-            189001: { pname: "Группа №1" },
-          },
-        },
-        {
-          pname: "АХП",
-          pcode: 190000,
-          fcolor:"",
-          subdivs: {
-            192000: { pname: "Х.O." },
-            191000: { pname: "Адм. бюро" },
-          },
-        },
-        {
-          pname: "ПФБ",
-          fcolor:"",
-          pcode: 195000,
-          subdivs: {
-            195003: { pname: "Группа №3" },
-            195002: { pname: "Группа №2" },
-            195001: { pname: "Группа №1" },
-          },
-        },
-      ];
       function hslToHex11(h, s, l) {
         h /= 360;
         s /= 100;
@@ -1407,14 +1301,14 @@ function tryColor(divcode){
          let aa =  hsl2rgb([h,1,0.60]);
          console.log('tryColor '+(h) + ' '+aa);
          return aa; 
-         
+            
      }
 
 function addRooms() {
         roomsGrp.clearLayers();
         console.log(' Begin  add Rooms ' + roomsGrp + ' lit=' + 'JSON.stringify(lit)');
         check_sel = $("input[type='radio'][name='floornum']:checked").val();
-        console.log(' BOUNDS ' + 'JSON.stringify(bounds)');
+        console.log(' BOUNDS ' + JSON.stringify(bounds)+' #lab_id# #LAB_ID#   plan_editor/images/#lab_dir#/#b_name#_');
         image = L.imageOverlay('plan_editor/images/#lab_dir#/#b_name#_' + check_sel + '.png', bounds).addTo(lit_map);
         lit_map.fitBounds(bounds);
         let aaa = $("input[type='radio'][name='floornum']:checked");
@@ -1499,7 +1393,7 @@ function addRooms() {
                         }
                         
                             
-                         console.log('RCOLOR= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+room_info.PPLS);
+//                         console.log('RCOLOR= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+room_info.PPLS);
                         
                 descr += "<tr ><td class=plan_pop_td  colspan=-1>"
                 descr += "Площадь: " + parseInt(room_info.SQR) + ' кв.м';

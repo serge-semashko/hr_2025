@@ -111,11 +111,14 @@
             <file>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/utils.cfg</file>
         </group>
         <group>
-            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/plan_alone_js.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/free/js_tabs.dat</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/jinr_divs_info.js</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/134.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/32.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/plans_lhep_editor.html</file>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/plans_info.js</file>
-            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/mlit_/134n.cfg</file>
-            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/mlit_/plan_alone.js</file>
-            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/mono_editor.html</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/plan_alone.js</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/201.cfg</file>
         </group>
     </open-files>
 </project-private>
