@@ -248,8 +248,9 @@ author = Семашко
                 div_color_add[topdivs[i].pcode] = addcolor;
             }
         }
+        console.log('DIV_COLOR!!!! '+JSON.stringify(div_color)+' '+ JSON.stringify(div_color_add));
 
-        debugger;
+//        debugger;
     </script>
     <script>
       function create_div_list() {
@@ -922,81 +923,6 @@ var phones = [{ 'number': '2162013', 'room': '121', 'lab': 'LHEP', 'building': '
 { 'number': '2166205', 'room': '403', 'lab': 'LHEP', 'building': '215' }];
 [end]
 
-
-function fill_rooms_info() {
-        console.log('!!!! BEGIN FILL INFO');
-        //    for (i in lit){
-        //        console.log('lit entry = '+i);
-        //      for (j in lit[i]){
-        //        console.log('lit entry = '+i +' '+j);
-        //      for (k in lit[i][j]){
-        //        console.log('lit entry = '+i +' '+j+' '+k);
-        //        }
-        //
-        //      }
-        //    }
-        let all_rooms_data = rooms_json.layers.Rooms.layerRaws;
-        var arr = [];
-        for (let i = 0; i < all_rooms_data.length; i++) {
-                var room = all_rooms_data[i];
-                //	debugger;
-                //	console.log(JSON.stringify(all_rooms_data));
-                //	console.log(JSON.stringify(room));
-                var room_id = all_rooms_data[i].properties.id;
-                all_rooms_data[i].properties.id = room_id;
-                var room_name = all_rooms_data[i].properties.name.toUpperCase().trim();
-                //	console.log('>>>>>>PROCESS room num='+room_name+' '+JSON.stringify(all_rooms_data[i]));
-
-                var room_floor = all_rooms_data[i].geometry.floor;
-                var ppls_arr = [];
-                if (room_name.length > 0) {
-                        if (room_name == '201') { console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ROOM=' + room_name + ' litsotr len=' + lhep_sotr.length); }
-
-                        for (let j = 0; j < lhep_sotr.length; j++) {
-                                let tmprooms = [lhep_sotr[j].rooms.trim().toUpperCase()];
-                                let building = lhep_sotr[j].buildings.trim().toUpperCase();
-                                if (room_name == '201') { console.log(lhep_sotr.length + '$$$$$$$$$$ROOM=201 CHECK ' + JSON.stringify(lhep_sotr[j])); }
-                                if (lhep_sotr[j].rooms.indexOf(',') > - 1) {
-                                        tmprooms = lhep_sotr[j].rooms.toUpperCase().split(',');
-                                        tmprooms.map(s => s.trim());
-                                }
-                                if (tmprooms.indexOf(room_name) > - 1 & building.indexOf('#plan_building_id#') > - 1) {
-
-                                        let fio = lhep_sotr[j].f + " " + lhep_sotr[j].i + " " + lhep_sotr[j].o;
-                                        ppls_arr.push({ "FL_ID": lhep_sotr[j].fl_id, "TABN": lhep_sotr[j].tabn, "TOPDIVCODE": lhep_sotr[j].TopParent_code, "SUBDIVCODE": lhep_sotr[j].SubTopParent_code, "FIO": fio });
-                                        console.log('ROOM add sotr=' + room_name + ' add ppl ' + JSON.stringify(lhep_sotr[j]));
-                                }
-                        }
-                }
-                var room_coord = getRoomCoordinates(all_rooms_data[i]);
-                var minX = maxX = room_coord[0][0];
-                var minY = maxY = room_coord[0][1];
-                for (let b = 0; b < room_coord.length; b++) {
-                        if (room_coord[b][0] < minX) {
-                                minX = room_coord[b][0];
-                        }
-                        if (room_coord[b][0] > maxX) {
-                                maxX = room_coord[b][0];
-                        }
-                        if (room_coord[b][1] < minY) {
-                                minY = room_coord[b][1];
-                        }
-                        if (room_coord[b][1] > maxY) {
-                                maxY = room_coord[b][1];
-                        }
-                }
-                var square = ((maxX - minX) * (maxY - minY) * 13 * 13) / 100;
-                var size = 0;
-                rooms_info[room_id] = { "id": room_id, "name": room_name, "floor": room_floor, "PPLS": ppls_arr, "SQR": square, "size": size, "geo_json": room_coord };
-                //        console.log('!!!! ROOM ID='+room_id+' ='+JSON.stringify(rooms_info[room_id]));
-                //    if (room_name.indexOf('607')>-1) {console.log(   room_name+' ===   '+JSON.stringify(rooms_info[room_id]));}
-        }
-        console.log('!!!! END FILL INFO');
-}
-
-
-
-
 [draw rooms]
 
 var check_sel;
@@ -1009,7 +935,7 @@ function toColor(num) {
 
 
 function fill_rooms_info() {
-//        console.log('!!!! BEGIN FILL INFO');
+        console.log('!!!! BEGIN FILL INFO '+JSON.stringify(lhep_sotr));
         let all_rooms_data = rooms_json.layers.Rooms.layerRaws;
         var arr = [];
         for (let i = 0; i < all_rooms_data.length; i++) {
@@ -1049,21 +975,17 @@ function fill_rooms_info() {
                 var room_coord = getRoomCoordinates(all_rooms_data[i]);
                 var minX = maxX = room_coord[0][0];
                 var minY = maxY = room_coord[0][1];
-                for (let b = 0; b < room_coord.length; b++) {
-                        if (room_coord[b][0] < minX) {
-                                minX = room_coord[b][0];
-                        }
-                        if (room_coord[b][0] > maxX) {
-                                maxX = room_coord[b][0];
-                        }
-                        if (room_coord[b][1] < minY) {
-                                minY = room_coord[b][1];
-                        }
-                        if (room_coord[b][1] > maxY) {
-                                maxY = room_coord[b][1];
-                        }
+                var sum1 = 0;
+                var sum2 = 9; 
+                for (let b = 0; b < room_coord.length-1; b++) {
+                    sum1 += room_coord[b][0]*room_coord[b+1][1];
+                    sum2 += room_coord[b+1][0]*room_coord[b][1];
                 }
-                var square = ((maxX - minX) * (maxY - minY) * 13 * 13) / 100;
+                    sum1 += room_coord[room_coord.length-1][0]*room_coord[0][1];
+                    sum2 += room_coord[0][0]*room_coord[room_coord.length-1][1];
+                    
+                
+                var square = all_rooms_data[i].properties.room_size;
                 var size = 0;
                 rooms_info[room_id] = { "id": room_id, "name": room_name, "floor": room_floor, "PPLS": ppls_arr, "SQR": square, "size": size, "geo_json": room_coord };
                 //        console.log('!!!! ROOM ID='+room_id+' ='+JSON.stringify(rooms_info[room_id]));
@@ -1312,7 +1234,7 @@ function addRooms() {
         image = L.imageOverlay('plan_editor/images/#lab_dir#/#b_name#_' + check_sel + '.png', bounds).addTo(lit_map);
         lit_map.fitBounds(bounds);
         let aaa = $("input[type='radio'][name='floornum']:checked");
-        console.log('aaa=' + aaa);
+        console.log('rooms_info!!!!!=' + JSON.stringify(rooms_info));
         let data = rooms_json.layers.Rooms.layerRaws.filter(function (item, i, arr) {
                 if (item.geometry.floor == check_sel) return item;
         });
@@ -1328,7 +1250,7 @@ function addRooms() {
                 let room_db = data[i];
                 var Owner = "";
                 var room_info = getRoomInfo(room_id);
-                //    console.log('ROOM info'+JSON.stringify(room_info))
+                console.log('ROOM info'+JSON.stringify(room_info))
                 
 //                AjaxCall('popupCont', 'c=edit/room_ppls&room_num=' +room_num+ ',&bld_name='+bld_name+'&room_id='+id, true);
                 
@@ -1393,10 +1315,10 @@ function addRooms() {
                         }
                         
                             
-//                         console.log('RCOLOR= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+room_info.PPLS);
+                         console.log('RCOLOR!!!!!= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+ fill_rooms_info(room_info));
                         
                 descr += "<tr ><td class=plan_pop_td  colspan=-1>"
-                descr += "Площадь: " + parseInt(room_info.SQR) + ' кв.м';
+                        //                descr += "Площадь: " + parseInt(room_info.SQR) + ' кв.м';
                 descr += "</td></tr>";
                 descr +="</table";
                 //    console.log(roomName+' '+rColor)
