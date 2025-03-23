@@ -2,10 +2,39 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="24">
         <file>
+            <url>WEB-INF/classes/configs/tab_reports_staff_chart.cfg</url>
+            <bookmark id="23">
+                <name/>
+                <line>836</line>
+                <key/>
+            </bookmark>
+            <bookmark id="24">
+                <name/>
+                <line>1915</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
             <url>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/main.cfg</url>
             <bookmark id="3">
                 <name/>
                 <line>158</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/maps/maps_lhep.cfg</url>
+            <bookmark id="1">
+                <name/>
+                <line>230</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>web/WEB-INF/configs/maps/maps_lhep_view.cfg</url>
+            <bookmark id="19">
+                <name/>
+                <line>358</line>
                 <key/>
             </bookmark>
         </file>
@@ -62,35 +91,6 @@
                 <key/>
             </bookmark>
         </file>
-        <file>
-            <url>file:/G:/home/JINR/HR_2019/hrlhep/web/WEB-INF/configs/maps/maps_lhep.cfg</url>
-            <bookmark id="1">
-                <name/>
-                <line>230</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
-            <url>web/WEB-INF/configs/maps/maps_lhep_view.cfg</url>
-            <bookmark id="19">
-                <name/>
-                <line>358</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
-            <url>WEB-INF/classes/configs/tab_reports_staff_chart.cfg</url>
-            <bookmark id="23">
-                <name/>
-                <line>836</line>
-                <key/>
-            </bookmark>
-            <bookmark id="24">
-                <name/>
-                <line>1915</line>
-                <key/>
-            </bookmark>
-        </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="dms_original"/>
@@ -113,6 +113,7 @@
         <group>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/labs_divs.js</file>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/maps/maps_lhep_view.cfg</file>
+            <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/maps/get_lit134_sotrlist.cfg</file>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/plans_lhep_editor.html</file>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/editor/plans_info.js</file>
             <file>file:/H:/YandexDisk/JINR_GIS/HR/HRJINR/WEB/WEB-INF/classes/configs/plans/lhep/215.cfg</file>
