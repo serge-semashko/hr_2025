@@ -7,7 +7,9 @@ author = Семашко
 [lit divs]
 [end]
 [fill structura menu]
+<script>
 
+</script>
     <script>
         function toHex (x){
           let hex = Math.round(x * 255).toString(16);
@@ -79,130 +81,9 @@ author = Семашко
         return retval;
       }
     </script>
+    
     <script>
-      var topdivs = [
-        { 
-          color_hsv: [0,0.8,1],
-          pname: "Рук.", pcode: 101000, subdivs: {} },
-        {
-          color_hsv: [0,0.8,1],
-          pname: "Гр. Сов. и К.",
-          pcode: 102000,
-          subdivs: {},
-        },
-        {
-          color_hsv: [16,1,1],
-          pname: "СИСТ",
-          pcode: 103000,
-          subdivs: {},
-        },
-        {
-          color_hsv: [16,0.6,1],
-          pname: "ИЭТО",
-          pcode: 189000,
-          subdivs: {
-            189003: {color_hsv: [16,0.6,1], pname: "Группа №3" },
-            189004: {color_hsv: [16,0.6,1], pname: "Группа №4" },
-            189002: {color_hsv: [16,0.6,1], pname: "Группа №2" },
-            189001: {color_hsv: [16,0.6,1], pname: "Группа №1" },
-          },
-        },
-        {
-          color_hsv: [338,1,1],
-          pname: "АХП",
-          pcode: 190000,
-          subdivs: {
-            192000: {color_hsv: [338,1,1], pname: "Х.O." },
-            191000: {color_hsv: [338,1,1], pname: "Адм. бюро" },
-          },
-        },
-        {
-          color_hsv: [347,0.5,1],
-          pname: "ПФБ",
-          pcode: 195000,
-          subdivs: {
-              
-            195003: {color_hsv: [347,0.5,1], pname: "Группа №3" },
-            195002: {color_hsv: [347,0.5,1], pname: "Группа №2" },
-            195001: {color_hsv: [347,0.5,1], pname: "Группа №1" },
-          },
-        },
-
-        {
-          color_hsv: [80,1,1],
-          pname: "Отд.№1",
-          show: true,
-          pcode: 110000,
-          subdivs: {
-            111000: {color_hsv: [70,1,1], pname: "НЭОУС" },
-            112000: {color_hsv: [70,0.8,0.8], pname: "НЭОИФПУ" },
-            113000: {color_hsv: [70,0.4,1], pname: "НТОП" },
-            114000: {color_hsv: [90,1,1], pname: "НЭОИКН" },
-            115000: {color_hsv: [90,0.8,0.8], pname: "НЭОРС" },
-            116000: {color_hsv: [90,0.4,1], pname: "НИОСЭН" },
-            117000: {color_hsv: [135,1,1], pname: "НИКО" },
-            125000: {color_hsv: [135,0.8,0.8], pname: "ДСН" },
-            126000: {color_hsv: [135,0.4,1], pname: "НЭСОП" },
-            129000: {color_hsv: [165,1,1], pname: "НЭОСМТ" }
-          },
-        },
-        {color_hsv: [195,1,1],
-          pname: "Отд.№2",
-          pcode: 120000,
-          show: true,
-          subdivs: {
-            122000: {color_hsv: [195,1,1], pname: "НЭОФТИ" },
-            123000: {color_hsv: [195,0.75,1], pname: "НЭОСФМС" },
-            124000: {color_hsv: [195,0.55,1], pname: "СФСКЯ" },
-            127000: {color_hsv: [210,0.2,1], pname: "НЭОТиМПП" },
-          },
-        },
-        {color_hsv: [245,1,1],
-          pname: "Отд.№3",
-          show: true,
-          pcode: 130000,
-          subdivs: {
-            135000: {color_hsv: [245,1,1], pname: "НЭОФСТИ" },
-            121000: {color_hsv: [245,0.75,1], pname: "НЭОMД" },
-            136000: {color_hsv: [245,0.55,1], pname: "НЭОССАиРП" },
-            137000: {color_hsv: [245,0.2,1], pname: "НЭОБМ" },
-          },
-        },
-        {color_hsv: [270,1,1],
-          pname: "Отд.№4",
-          show: true,
-          pcode: 140000,
-          subdivs: {
-            142000: {color_hsv: [270,1,1], pname: "НЭОФТИ  LHC" },
-            134000: {color_hsv: [270,0.75,1], pname: "Сф на АТЛАС" },
-            141000: {color_hsv: [270,0.55,1], pname: "НЭОФТИ  RHIC" },
-            132000: {color_hsv: [270,0.2,1], pname: "НЭОФ на CMS" },
-          },
-        },
-        {color_hsv: [300,1,1],
-          pname: "Отд.№5",
-          show: true,
-          pcode: 150000,
-          subdivs: {
-            157000: {color_hsv: [300,1,1], pname: "СК" },
-            156000: {color_hsv: [300,0.75,1], pname: "СРС" },
-            158000: {color_hsv: [300,0.55,1], pname: "НМОКТС" },
-            151000: {color_hsv: [300,0.2,1], pname: "НЭОАФИ" },
-          },
-        },
-        {color_hsv: [31,1,1],
-          pname: "Отд.№6",
-          show: true,
-          pcode: 170000,
-          subdivs: {
-            172000: {color_hsv: [31,1,1], pname: "ЦОЭП" },
-            171000: {color_hsv: [31,0.75,0.8], pname: "КО" },
-            176000: {color_hsv: [31,0.4,1], pname: "САСУТП ЛФВЭ" },
-            170010: {color_hsv: [31,0.2,1], pname: "ГВвЭОиРД" },
-          },
-        },
-        {color_hsv: [45,1,1], pname: "ПKO", pcode: 175000, subdivs: {} }
-      ];
+      
       var ocnt = 0;
       for (tdiv in topdivs) {
         ocnt += 1;
@@ -234,14 +115,66 @@ author = Семашко
             return hsvToHex([ h1,1,1]);
             return hsvToHex([ h1,s1,v1]);
         }
+function rgb2hsv ([r, g, b]) {
+    let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+    rabs = r / 255;
+    gabs = g / 255;
+    babs = b / 255;
+    v = Math.max(rabs, gabs, babs),
+    diff = v - Math.min(rabs, gabs, babs);
+    diffc = c => (v - c) / 6 / diff + 1 / 2;
+    percentRoundFn = num => Math.round(num * 100) / 100;
+    if (diff == 0) {
+        h = s = 0;
+    } else {
+        s = diff / v;
+        rr = diffc(rabs);
+        gg = diffc(gabs);
+        bb = diffc(babs);
+
+        if (rabs === v) {
+            h = bb - gg;
+        } else if (gabs === v) {
+            h = (1 / 3) + rr - bb;
+        } else if (babs === v) {
+            h = (2 / 3) + gg - rr;
+        }
+        if (h < 0) {
+            h += 1;
+        }else if (h > 1) {
+            h -= 1;
+        }
+    }
+    return [
+         Math.round(h * 360),
+         percentRoundFn(s * 100),
+         percentRoundFn(v * 100)
+];
+}        
+function check_hsv(i) {
+    if (i.color_hsv ===undefined){
+         if (i.color_rgb ===undefined){
+            var a=1;
+         } else{
+            i.color_hsv = rgb2hsv(i.color_rgb);
+         }
+    }
+
+} ;
+        
+        
+        
         for (i in topdivs) {
             if (topdivs[i].pname.trim().length > 1) {
                 for (isub in topdivs[i].subdivs) {
+                  check_hsv(topdivs[i].subdivs[isub])  ;
                   let bcolor =   hsvToHex(topdivs[i].subdivs[isub].color_hsv);
+                   
                   let addcolor = hsv_add(topdivs[i].subdivs[isub].color_hsv);
                   div_color[isub] = bcolor;
                   div_color_add[isub] = addcolor;
                 }
+                check_hsv(topdivs[i])  ;
                 bcolor = hsvToHex(topdivs[i].color_hsv);
                 addcolor = hsv_add(topdivs[i].color_hsv);
                 div_color[topdivs[i].pcode] = bcolor;
