@@ -147,8 +147,8 @@ function rgb2hsv ([r, g, b]) {
     }
     return [
          Math.round(h * 360),
-         percentRoundFn(s * 100),
-         percentRoundFn(v * 100)
+         percentRoundFn(s ),
+         percentRoundFn(v )
 ];
 }        
 function check_hsv(i) {
@@ -161,8 +161,16 @@ function check_hsv(i) {
     }
 
 } ;
-        
-        
+
+        for (i in topdivs) {
+            if (topdivs[i].pname.trim().length > 1) {
+                for (isub in topdivs[i].subdivs) {
+                  check_hsv(topdivs[i].subdivs[isub])  ;
+                }
+                check_hsv(topdivs[i])  ;
+            }
+        }
+        console.log("add color to divs "+JSON.stringify(topdivs));
         
         for (i in topdivs) {
             if (topdivs[i].pname.trim().length > 1) {
@@ -187,6 +195,10 @@ function check_hsv(i) {
     </script>
     <script>
       function create_div_list() {
+        console.log("Create div menu "+JSON.stringify(topdivs));
+        console.log("div color  "+JSON.stringify(div_color));
+        console.log("div color add  "+JSON.stringify(div_color_add));
+        
         let block = '<details open=""><summary>';
         let subblock = "";
         let bcolor='';
@@ -410,14 +422,10 @@ function loadIcons(data) {
         return;
         //console.log(data + ' ' + data.length);
         for (let i = 0; i < data.length; i++) {
-                console.log(icon_data);
-                console.log(data[i]);
                 coords = [data[i].geometry.coordinates[0] / 10 + 6, data[i].geometry.coordinates[1] / 10 - 2];
                 obj_type = data[i].properties.type;
                 obj_id = data[i].properties.id;
                 obj_desc = data[i].properties.description;
-                console.log('coord= ' + coords);
-                console.log('type= ' + obj_type);
                 let url1 = 'https://LT-SVR230.jinr.ru:8082/get_icon?' + "object_type=" + obj_type.toString() + "&object_name=" + obj_type.toString();
                 var greenIcon = L.icon({
                         iconUrl: url1,
@@ -1039,22 +1047,22 @@ function centerRoom(room_num) {
         }
 
         let aa = $('[id=' + room_num[0] + '][name=floornum]');
-        console.log(room_num[0])
+        console.log('[id=' + room_num[0] + '][name=floornum]')
         aa.click();
         addRooms();
         for (r in rooms_info) {
                 //    console.log(room_num+' '+r+' '+rooms_info[r].name+' '+rooms_info);
                 if (rooms_info[r].name == room_num.toUpperCase()) {
-                        console.log('!!!!!!!!!!' + rooms_info[r].geo_json);
+                    //    console.log('!!!!!!!!!!' + rooms_info[r].geo_json);
                         let geo = [0, 0];
                         for (i in rooms_info[r].geo_json) {
                                 geo[0] += rooms_info[r].geo_json[i][0];
                                 geo[1] += rooms_info[r].geo_json[i][1];
-                                console.log('CENTER ROOM !!!!!!!!!!!!!!!!! ' + geo + '  ' + i + '= ' + rooms_info[r].geo_json[i])
+                             //   console.log('CENTER ROOM !!!!!!!!!!!!!!!!! ' + geo + '  ' + i + '= ' + rooms_info[r].geo_json[i])
                         }
                         geo[0] /= rooms_info[r].geo_json.length;
                         geo[1] /= rooms_info[r].geo_json.length;
-                        console.log(geo + '  ' + rooms_info[r].geo_json.length);
+                       // console.log(geo + '  ' + rooms_info[r].geo_json.length);
                         red_mark.setLatLng(geo);
                         roomsGrp.addLayer(red_mark);
                         lit_map.panTo(geo)
@@ -1109,7 +1117,7 @@ function rgbToHex(r,g,b) {
       
 function hsl2rgb(hsl) {
     var h = hsl[0], s = hsl[1], l = hsl[2];
-    console.log('hsl2rgb '+h+' '+s+' '+l);
+ //   console.log('hsl2rgb '+h+' '+s+' '+l);
     var m1, m2, hue;
     var r, g, b
     h = (Math.round( 360*h )/1);
@@ -1126,7 +1134,7 @@ function hsl2rgb(hsl) {
         g = Math.round(HueToRgb(m1, m2, hue));
         b = Math.round(HueToRgb(m1, m2, hue - 1/3));
     }
-    console.log(r+' '+g+' '+b);
+ //   console.log(r+' '+g+' '+b);
     
     return rgbToHex(r,g,b);
 }
@@ -1151,10 +1159,10 @@ function HueToRgb(m1, m2, hue) {
 }
 function tryColor(divcode){
          let h = (+divcode)/100000;
-         console.log('divcode '+divcode+' '+h);
+   //      console.log('divcode '+divcode+' '+h);
          
          let aa =  hsl2rgb([h,1,0.60]);
-         console.log('tryColor '+(h) + ' '+aa);
+ //        console.log('tryColor '+(h) + ' '+aa);
          return aa; 
             
      }
@@ -1183,7 +1191,7 @@ function addRooms() {
                 let room_db = data[i];
                 var Owner = "";
                 var room_info = getRoomInfo(room_id);
-                console.log('ROOM info'+JSON.stringify(room_info))
+              //  console.log('ROOM info'+JSON.stringify(room_info))
                 
 //                AjaxCall('popupCont', 'c=edit/room_ppls&room_num=' +room_num+ ',&bld_name='+bld_name+'&room_id='+id, true);
                 
@@ -1235,11 +1243,16 @@ function addRooms() {
 //                                debugger;
                                 rColor = div_color[room_info.PPLS[0].SUBDIVCODE];
                                 fColor = div_color_add[room_info.PPLS[0].SUBDIVCODE];
+                                if (rColor === undefined){
+                                rColor = div_color[room_info.PPLS[0].TOPDIVCODE];
+                                fColor = div_color_add[room_info.PPLS[0].TOPDIVCODE];
+
+                                }
                         }
                         
-                        console.log(JSON.stringify(room_db.properties.ext_use));
+                     //   console.log(JSON.stringify(room_db.properties.ext_use));
                         if (room_db.properties.ext_use.length>0) {
-                                console.log('ext use = '+ JSON.stringify(room_db.properties.ext_use));
+                             //   console.log('ext use = '+ JSON.stringify(room_db.properties.ext_use));
                                 rColor = '##33E800'
                         }
                         if (roomName.indexOf('WC')>-1) {
@@ -1248,7 +1261,7 @@ function addRooms() {
                         }
                         
                             
-                         console.log('RCOLOR!!!!!= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+ fill_rooms_info(room_info));
+                      //   console.log('RCOLOR!!!!!= = '+ rColor + ' ext='+room_db.properties.ext_use+' ppls'+ fill_rooms_info(room_info));
                         
                 descr += "<tr ><td class=plan_pop_td  colspan=-1>"
                         //                descr += "Площадь: " + parseInt(room_info.SQR) + ' кв.м';
