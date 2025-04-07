@@ -203,7 +203,8 @@ function check_hsv(i) {
         let subblock = "";
         let bcolor='';
         block +=
-          'Подразделения <input type=checkbox name=divs_selected_for_draw onchange="checkAll(this.name,this.checked,this)"  >Все';
+          'Подразделения';
+//        block += <input type=checkbox name=divs_selected_for_draw onchange="checkAll(this.name,this.checked,this)"  >Все';
         block += "</summary>";
         for (i in topdivs) {
           if (topdivs[i].pname.trim().length > 1) {
@@ -213,10 +214,10 @@ function check_hsv(i) {
 //              div_color[isub] = bcolor;
               bcolor = div_color[isub] ;
               fcolor = div_color_add[isub] ;
-              subblock += "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" +  "<input  pcode="  + isub;
-                subblock +=' onchange="set_filter_visible();" name=divs_selected_for_draw_list type=checkbox value="' +
-                topdivs[i].pname +
-                "_" + topdivs[i].subdivs[isub].pname + '">';
+              subblock += "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
+//              subblock +=  "<input  pcode="  + isub;
+//              subblock +=' onchange="set_filter_visible();" name=divs_selected_for_draw_list type=checkbox value="';
+//              subblock += topdivs[i].pname + "_" + topdivs[i].subdivs[isub].pname + '">';
                 subblock +='<em style="background-color:'+bcolor+'; color:'+fcolor+'">&nbsp;&nbsp;&nbsp;&nbsp;</em>';
             subblock += '<b>' + topdivs[i].subdivs[isub].pname +   "</b><br>";
             }
@@ -229,15 +230,15 @@ function check_hsv(i) {
 //            div_color[topdivs[i].pcode] = bcolor;
             bcolor = div_color[topdivs[i].pcode] ;
             fcolor = div_color_add[topdivs[i].pcode] ;
-            block += "<input  pcode=" + topdivs[i].pcode;
-            if (topdivs[i].show) {
-              block += " checked ";
-            }
+//            block += "<input  pcode=" + topdivs[i].pcode;
+//            if (topdivs[i].show) {
+//              block += " checked ";
+//            }
 
-            block +=
-              ' onchange="set_filter_visible();" name=divs_selected_for_draw_list type=checkbox value="' +
-              topdivs[i].pname +
-              '">';
+//            block +=
+//              ' onchange="set_filter_visible();" name=divs_selected_for_draw_list type=checkbox value="' +
+//              topdivs[i].pname +
+//              '">';
             block  += '<em style="background-color:'+bcolor+'; color:'+fcolor+'">&nbsp;&nbsp;&nbsp;&nbsp;</em>';
             block  += '<b>' + topdivs[i].pname + "</b><br>";
             if (subblock.length > 0) {
@@ -1201,7 +1202,7 @@ function addRooms() {
         console.log(' BOUNDS ' + JSON.stringify(bounds)+' #lab_id# #LAB_ID#   plan_editor/images/#lab_dir#/#b_name#_');
         image = L.imageOverlay('plan_editor/images/#lab_dir#/#b_name#_' + check_sel + '.png', bounds).addTo(lit_map);
         
-        lit_map.fitBounds(bounds,{padding:[40,40]});
+        lit_map.fitBounds(bounds,{padding:[-10,-10]});
         let aaa = $("input[type='radio'][name='floornum']:checked");
         console.log('rooms_info!!!!!=' + JSON.stringify(rooms_info));
         let data = rooms_json.layers.Rooms.layerRaws.filter(function (item, i, arr) {

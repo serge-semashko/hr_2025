@@ -31,11 +31,11 @@ var t_reports_hr = function() {AjaxCall("c_reports_hr", "c=tab_reports_staff-hr"
 var t_samples = function() {AjaxCall("c_samples", "c=tab_samples");} 
 var t_iss = function() {AjaxCall("c_iss", "c=tab_iss");} 
 var t_mapedit = function() {AjaxCall("c_mapedit", "c=tab_rnd");} 
-var t_mapbuilding = function() {AjaxCall("c_mapbuilding", "c=/maps/map_building");} 
+var t_mapbuilding = function() {AjaxCall("c_mapbuilding", "c=/plans/mlit/iframe134.cfg");} 
 var t_LHEP_215 = function() {AjaxCall("c_LHEP_215", "c=/plans/lhep/iframe215.cfg");} 
 var t_LHEP_215_admin = function() {AjaxCall("c_LHEP_215_admin", "c=/plans/lhep/215/iframe215.cfg");} ??LAB_ID=100000&rooms_edit
-var t_LHEP_32 = function() {AjaxCall("c_LHEP_32", "c=/plans/lhep/32/iframe32.cfg");} 
-var t_LHEP_201 = function() {AjaxCall("c_LHEP_201", "c=/plans/lhep/201/iframe201.cfg");} 
+var t_LHEP_32 = function() {AjaxCall("c_LHEP_32",   "c=/plans/lhep/iframe32.cfg");} 
+var t_LHEP_201 = function() {AjaxCall("c_LHEP_201", "c=/plans/lhep/iframe201.cfg");} 
 var t_map = function() {AjaxCall("c_map", "c=tab_map");} 
 var t_personal_place = function() {AjaxCall("c_personal_place", "c=tab_personal_place");} 
 var t_div_place = function() {AjaxCall("c_div_place", "c=tab_div_place");} 
